@@ -1,3 +1,0 @@
-/Users/rahim/Documents/proj-rt/proj-rt-files/build/CMakeFiles/rebuild_cache.dir
-/Users/rahim/Documents/proj-rt/proj-rt-files/build/CMakeFiles/edit_cache.dir
-/Users/rahim/Documents/proj-rt/proj-rt-files/build/CMakeFiles/ray_tracer.dir
