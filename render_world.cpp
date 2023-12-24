@@ -22,15 +22,23 @@ Render_World::~Render_World()
 // to ensure that hit.dist>=small_t.
 Hit Render_World::Closest_Intersection(const Ray& ray)
 {
+    Hit output;
+    for (int i = 0 ; i < objects.size(); i++){
+        output = objects[i]->Intersection(ray, -1);
+        if (output.object != nullptr) {
+            return output;
+        }
+    }
     TODO;
     return {};
 }
+
 
 // set up the initial view ray and call
 void Render_World::Render_Pixel(const ivec2& pixel_index)
 {
     TODO; // set up the initial view ray here
-    Ray ray;
+    Ray ray = Ray(camera.position, camera.World_Position(pixel_index) - camera.position);
     vec3 color=Cast_Ray(ray,1);
     camera.Set_Pixel(pixel_index,Pixel_Color(color));
 }
@@ -49,8 +57,12 @@ void Render_World::Render()
 // or the background color if there is no object intersection
 vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
 {
+    TODO; // determine the color here 
     vec3 color;
-    TODO; // determine the color here
+    Hit closest = Closest_Intersection(ray);
+    if (closest.object != nullptr){
+        return closest.object->material_shader->Shade_Surface(ray, vec3(0,0,0), vec3(0,0,0), recursion_depth);
+    }
     return color;
 }
 
