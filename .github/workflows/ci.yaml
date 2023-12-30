@@ -1,0 +1,18 @@
+name: CI
+run-name: CI on ${{ github.ref }} on ${{ github.sha }}
+on:
+  push:
+    branches:
+     - main
+jobs:
+  Build-And-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - run:  mkdir build
+      - run:  cd build
+      - name: Run Cmake Config step
+        run:  cmake ..
+      - name: Run build
+        run:  cmake --build . --parallel 2
