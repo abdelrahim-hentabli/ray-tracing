@@ -1,3 +1,5 @@
+#include <limits>
+
 #include "render_world.hpp"
 #include "flat_shader.hpp"
 #include "object.hpp"
@@ -22,15 +24,18 @@ Render_World::~Render_World()
 // to ensure that hit.dist>=small_t.
 Hit Render_World::Closest_Intersection(const Ray& ray)
 {
-    Hit output;
+    Hit temp;
+    Hit output {nullptr, std::numeric_limits<double>::max(), 0};
     for (int i = 0 ; i < objects.size(); i++){
-        output = objects[i]->Intersection(ray, -1);
-        if (output.object != nullptr) {
-            return output;
+        temp = objects[i]->Intersection(ray, -1);
+        if (temp.object != nullptr) {
+            if(temp.dist < output.dist){
+                output = temp;
+            }
         }
     }
     TODO;
-    return {};
+    return output;
 }
 
 
