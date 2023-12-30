@@ -1,8 +1,8 @@
 #ifndef __BOX_H__
 #define __BOX_H__
 
-#include "ray.h"
-#include "misc.h"
+#include "ray.hpp"
+#include "misc.hpp"
 #include <limits>
 
 class Box

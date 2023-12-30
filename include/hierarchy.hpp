@@ -1,7 +1,7 @@
 #ifndef __HIERARCHY_H__
 #define __HIERARCHY_H__
 
-#include "object.h"
+#include "object.hpp"
 
 /*
   A hierarchy is a binary tree.  We represent the hierarchy as a complete

@@ -2,7 +2,7 @@
 #define __REFLECTIVE_SHADER_H__
 
 #include <algorithm>
-#include "shader.h"
+#include "shader.hpp"
 
 class Reflective_Shader : public Shader
 {

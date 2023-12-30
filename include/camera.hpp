@@ -2,8 +2,8 @@
 #define __CAMERA_H__
 
 #include <algorithm>
-#include "vec.h"
-#include "misc.h"
+#include "vec.hpp"
+#include "misc.hpp"
 
 typedef unsigned int Pixel;
 

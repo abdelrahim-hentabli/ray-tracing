@@ -1,7 +1,7 @@
 #ifndef __MESH_H__
 #define __MESH_H__
 
-#include "object.h"
+#include "object.hpp"
 
 // Consider a hit to be inside a triange if all barycentric weights
 // satisfy weight>=-weight_tol

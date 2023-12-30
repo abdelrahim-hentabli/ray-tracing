@@ -4,9 +4,9 @@
 //#####################################################################
 // Function #in
 //#####################################################################
-#include "object.h"
-#include "ray.h"
-#include "vec.h"
+#include "object.hpp"
+#include "ray.hpp"
+#include "vec.hpp"
 
 template<class T, int d>
 vec<T,d> componentwise_max(const vec<T,d>& a, const vec<T,d>& b)

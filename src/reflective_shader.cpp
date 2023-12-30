@@ -1,6 +1,6 @@
-#include "reflective_shader.h"
-#include "ray.h"
-#include "render_world.h"
+#include "reflective_shader.hpp"
+#include "ray.hpp"
+#include "render_world.hpp"
 
 vec3 Reflective_Shader::
 Shade_Surface(const Ray& ray,const vec3& intersection_point,

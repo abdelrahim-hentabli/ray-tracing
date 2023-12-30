@@ -1,7 +1,7 @@
 #ifndef __SPHERE_H__
 #define __SPHERE_H__
 
-#include "object.h"
+#include "object.hpp"
 class Sphere : public Object
 {
     vec3 center;

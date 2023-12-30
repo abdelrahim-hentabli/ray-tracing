@@ -1,7 +1,7 @@
 #ifndef __PLANE_H__
 #define __PLANE_H__
 
-#include "object.h"
+#include "object.hpp"
 
 class Plane : public Object
 {
