@@ -8,4 +8,3 @@ find_package(PNG REQUIRED)
 include_directories(${PNG_INCLUDE_DIR})
 
 target_link_libraries(ray_tracer ${PNG_LIBRARY})
-add_definitions(-std=c++11)
