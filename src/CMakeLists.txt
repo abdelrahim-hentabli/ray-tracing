@@ -5,7 +5,4 @@ target_include_directories(ray_tracer
     PRIVATE ${PNG_INCLUDE_DIR}
     PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
-message(STATUS "PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
-message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
-
 target_link_libraries(ray_tracer ${PNG_LIBRARY})
