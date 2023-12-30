@@ -1,8 +1,8 @@
-#include "render_world.h"
-#include "flat_shader.h"
-#include "object.h"
-#include "light.h"
-#include "ray.h"
+#include "render_world.hpp"
+#include "flat_shader.hpp"
+#include "object.hpp"
+#include "light.hpp"
+#include "ray.hpp"
 
 extern bool disable_hierarchy;
 

@@ -1,5 +1,5 @@
-#include "plane.h"
-#include "ray.h"
+#include "plane.hpp"
+#include "ray.hpp"
 #include <cfloat>
 #include <limits>
 

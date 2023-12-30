@@ -1,8 +1,8 @@
-#include "light.h"
-#include "phong_shader.h"
-#include "ray.h"
-#include "render_world.h"
-#include "object.h"
+#include "light.hpp"
+#include "phong_shader.hpp"
+#include "ray.hpp"
+#include "render_world.hpp"
+#include "object.hpp"
 
 vec3 Phong_Shader::
 Shade_Surface(const Ray& ray,const vec3& intersection_point,

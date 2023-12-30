@@ -1,5 +1,5 @@
-#include "render_world.h"
-#include "object.h"
+#include "render_world.hpp"
+#include "object.hpp"
 #include <iostream>
 #include <cstdio>
 #include <unistd.h>

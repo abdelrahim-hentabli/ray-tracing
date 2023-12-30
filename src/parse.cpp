@@ -1,16 +1,16 @@
 #include <map>
 #include <sstream>
 #include <string>
-#include "direction_light.h"
-#include "flat_shader.h"
-#include "mesh.h"
-#include "phong_shader.h"
-#include "plane.h"
-#include "point_light.h"
-#include "reflective_shader.h"
-#include "render_world.h"
-#include "sphere.h"
-#include "spot_light.h"
+#include "direction_light.hpp"
+#include "flat_shader.hpp"
+#include "mesh.hpp"
+#include "phong_shader.hpp"
+#include "plane.hpp"
+#include "point_light.hpp"
+#include "reflective_shader.hpp"
+#include "render_world.hpp"
+#include "sphere.hpp"
+#include "spot_light.hpp"
 
 void Parse(Render_World& world,int& width,int& height,const char* test_file)
 {

@@ -1,5 +1,5 @@
-#include "sphere.h"
-#include "ray.h"
+#include "sphere.hpp"
+#include "ray.hpp"
 
 // Determine if the ray intersects with the sphere
 Hit Sphere::Intersection(const Ray& ray, int part) const

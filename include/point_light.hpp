@@ -5,8 +5,8 @@
 #include <vector>
 #include <iostream>
 #include <limits>
-#include "vec.h"
-#include "light.h"
+#include "vec.hpp"
+#include "light.hpp"
 
 class Point_Light : public Light
 {

@@ -1,7 +1,7 @@
 #ifndef __SHADER_H__
 #define __SHADER_H__
 
-#include "vec.h"
+#include "vec.hpp"
 class Render_World;
 class Ray;
 

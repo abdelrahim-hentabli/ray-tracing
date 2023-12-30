@@ -2,8 +2,8 @@
 #define __OBJECT_H__
 
 #include <vector>
-#include "box.h"
-#include "vec.h"
+#include "box.hpp"
+#include "vec.hpp"
 
 // t has to be bigger than small_t to register an intersection with a ray.  You
 // may need to tweak this value.

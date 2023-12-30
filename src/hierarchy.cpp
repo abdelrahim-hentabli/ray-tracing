@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "hierarchy.h"
+#include "hierarchy.hpp"
 
 // Reorder the entries vector so that adjacent entries tend to be nearby.
 // You may want to implement box.cpp first.

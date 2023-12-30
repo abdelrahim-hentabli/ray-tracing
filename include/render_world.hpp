@@ -2,9 +2,9 @@
 #define __RENDER_WORLD_H__
 
 #include <vector>
-#include "camera.h"
-#include "hierarchy.h"
-#include "object.h"
+#include "camera.hpp"
+#include "hierarchy.hpp"
+#include "object.hpp"
 
 class Light;
 class Shader;
