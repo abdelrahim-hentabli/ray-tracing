@@ -10,7 +10,7 @@ Hit Sphere::Intersection(const Ray& ray, int part) const
     if (tc < 0.0){
         return {0,0,0};
     }
-    float dist_to_center_squared = (tc * tc) - L.magnitude_squared();
+    float dist_to_center_squared = L.magnitude_squared() - tc * tc;
     if(abs(dist_to_center_squared) >  radius * radius){
         return {0,0,0};
     }
@@ -22,9 +22,8 @@ Hit Sphere::Intersection(const Ray& ray, int part) const
 
 vec3 Sphere::Normal(const vec3& point, int part) const
 {
-    vec3 normal;
-    TODO; // compute the normal direction
-    return normal;
+    vec3 normal = point - center;
+    return normal.normalized();
 }
 
 Box Sphere::Bounding_Box(int part) const
