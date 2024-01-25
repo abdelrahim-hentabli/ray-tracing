@@ -69,7 +69,9 @@ vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
         vec3 point = ray.endpoint + closest.dist * ray.direction;
         return closest.object->material_shader->Shade_Surface(ray, point, closest.object->Normal(point, closest.part), recursion_depth);
     }
-    return color;
+    else{
+        return background_shader->Shade_Surface(ray, {0,0,0}, -ray.direction, recursion_depth);
+    }
 }
 
 void Render_World::Initialize_Hierarchy()
