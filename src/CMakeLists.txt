@@ -4,7 +4,8 @@ add_library(ray_tracer OBJECT camera.cpp hierarchy.cpp dump_png.cpp flat_shader.
 
 target_include_directories(ray_tracer
     PRIVATE ${PNG_INCLUDE_DIR}
-    PRIVATE ${PROJECT_SOURCE_DIR}/include)
+    PRIVATE ${PROJECT_SOURCE_DIR}/include
+    PRIVATE ${CMAKE_BINARY_DIR}/generated)
 
 target_link_libraries(ray_tracer ${PNG_LIBRARY})
 
