@@ -6,8 +6,6 @@
 #include "light.hpp"
 #include "ray.hpp"
 
-extern bool disable_hierarchy;
-
 Render_World::Render_World()
     :background_shader(0),ambient_intensity(0),enable_shadows(true),
     recursion_depth_limit(3)
@@ -50,8 +48,7 @@ void Render_World::Render_Pixel(const ivec2& pixel_index)
 
 void Render_World::Render()
 {
-    if(!disable_hierarchy)
-        Initialize_Hierarchy();
+    Initialize_Hierarchy();
 
     for(int j=0;j<camera.number_pixels[1];j++)
         for(int i=0;i<camera.number_pixels[0];i++)

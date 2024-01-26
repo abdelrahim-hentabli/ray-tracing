@@ -1,7 +1,7 @@
 #include <png.h>
 #include <cassert>
 
-typedef unsigned int Pixel;
+#include "dump_png.hpp"
 
 void Dump_png(Pixel* data,int width,int height,const char* filename)
 {
