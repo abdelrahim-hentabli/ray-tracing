@@ -4,7 +4,6 @@
 // Determine if the ray intersects with the sphere
 Hit Sphere::Intersection(const Ray& ray, int part) const
 {
-    TODO;
     vec3 L = center - ray.endpoint;
     double tc = dot(L, ray.direction);
     if (tc < 0.0){
