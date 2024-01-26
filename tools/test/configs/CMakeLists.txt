@@ -1,0 +1,5 @@
+get_property(cases_directory GLOBAL PROPERTY cases_directory_property)
+get_property(objects_directory GLOBAL PROPERTY objects_directory_property)
+get_property(test_solutions_directory GLOBAL PROPERTY test_solutions_directory_property)
+
+configure_file(directories.hpp.in ${CMAKE_BINARY_DIR}/generated/directories.hpp )

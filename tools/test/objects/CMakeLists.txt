@@ -1,0 +1,1 @@
+SET(objects_directory "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "objects_directory")

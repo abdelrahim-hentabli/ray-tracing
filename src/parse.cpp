@@ -1,3 +1,5 @@
+#include "parse.hpp"
+
 #include <map>
 #include <sstream>
 #include <string>
@@ -8,7 +10,6 @@
 #include "plane.hpp"
 #include "point_light.hpp"
 #include "reflective_shader.hpp"
-#include "render_world.hpp"
 #include "sphere.hpp"
 #include "spot_light.hpp"
 

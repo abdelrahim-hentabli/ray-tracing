@@ -1,0 +1,21 @@
+#ifndef DIRECTORIES_HPP
+#define DIRECTORIES_HPP
+
+#include <string>
+
+const std::string getCasesDir()
+{
+    return "@cases_directory@/";
+}
+
+const std::string getObjectsDir()
+{
+    return "@objects_directory@/";
+}
+
+const std::string getTestSolutionsDir()
+{
+    return "@test_solutions_directory@/";
+}
+
+#endif // DIRECTORIES_HPP
