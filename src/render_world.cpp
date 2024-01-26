@@ -32,7 +32,6 @@ Hit Render_World::Closest_Intersection(const Ray& ray)
             }
         }
     }
-    TODO;
     return output;
 }
 
@@ -40,7 +39,6 @@ Hit Render_World::Closest_Intersection(const Ray& ray)
 // set up the initial view ray and call
 void Render_World::Render_Pixel(const ivec2& pixel_index)
 {
-    TODO; // set up the initial view ray here
     Ray ray = Ray(camera.position, camera.World_Position(pixel_index) - camera.position);
     vec3 color=Cast_Ray(ray,1);
     camera.Set_Pixel(pixel_index,Pixel_Color(color));
@@ -58,8 +56,7 @@ void Render_World::Render()
 // cast ray and return the color of the closest intersected surface point,
 // or the background color if there is no object intersection
 vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
-{
-    TODO; // determine the color here 
+{ 
     vec3 color;
     Hit closest = Closest_Intersection(ray);
     if (closest.object != nullptr){
