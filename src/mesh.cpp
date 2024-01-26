@@ -3,6 +3,8 @@
 #include <string>
 #include <limits>
 
+#include "directories.hpp"
+
 // Consider a triangle to intersect a ray if the ray intersects the plane of the
 // triangle with barycentric weights in [-weight_tolerance, 1+weight_tolerance]
 static const double weight_tolerance = 1e-4;
@@ -11,7 +13,7 @@ static const double weight_tolerance = 1e-4;
 // one part per triangle (by setting number_parts).
 void Mesh::Read_Obj(const char* file)
 {
-    std::ifstream fin(file);
+    std::ifstream fin(getObjectsDir() + file);
     if(!fin)
     {
         exit(EXIT_FAILURE);

@@ -3,17 +3,17 @@
 
 #include <string>
 
-const std::string getCasesDir()
+static inline const std::string getCasesDir()
 {
     return "@cases_directory@/";
 }
 
-const std::string getObjectsDir()
+static inline const std::string getObjectsDir()
 {
     return "@objects_directory@/";
 }
 
-const std::string getTestSolutionsDir()
+static inline const std::string getTestSolutionsDir()
 {
     return "@test_solutions_directory@/";
 }
