@@ -17,7 +17,16 @@ Shade_Surface(const Ray& ray, const vec3& intersection_point,
     vec3 normalizedLightDir;
 
     for (Light *light: world.lights){
-        currentLightDir = light->position - intersection_point;
+        currentLightDir    = light->position - intersection_point;
+        normalizedLightDir = currentLightDir.normalized();
+        if(world.enable_shadows){
+            Hit closest = world.Closest_Intersection(Ray(intersection_point,normalizedLightDir));
+            if (closest.object != nullptr){
+                if(closest.dist < currentLightDir.magnitude()){
+                    continue;
+                }
+            }
+        }
         if (dot(currentLightDir, normal) < 1e-6) {
             continue;
         }
