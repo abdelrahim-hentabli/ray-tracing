@@ -106,8 +106,49 @@ vec3 Mesh::Normal(const vec3& point, int part) const
 // two triangles.
 bool Mesh::Intersect_Triangle(const Ray& ray, int tri, double& dist) const
 {
+    vec3 point0 = vertices[triangles[tri][0]];
+    vec3 point1 = vertices[triangles[tri][1]];
+    vec3 point2 = vertices[triangles[tri][2]];
+    
+    vec3 normal =  cross(point1 - point0, point2 - point0).normalized();
+
+    double denominator = normal.magnitude_squared();
+
+    if(abs(dot(normal,ray.direction)) < 1e-4) {
+        return false;
+    }
+
+    double d = -dot(normal, point0);
+
+    double t = -(dot(normal, ray.endpoint) + d);
+    if (t < 0){
+        return false;
+    }
+
+    vec3 p = ray.endpoint + t * ray.direction;
+
+    vec3 c = cross(point1 - point0, p - point0);
+
+    if (dot(normal,c) < 0) {
+        return false;
+    }
+
+    c = cross(point2 - point1, p - point1);
+    double u = dot(normal,c);
+    if (u < 0){
+        return false;
+    }
+    
+    c = cross(point0 - point2, p - point2);
+    double v = dot(normal, c);
+    if (v < 0) {
+        return false;
+    }
+    u /= denominator;
+    v /= denominator;
     TODO;
-    return false;
+    dist = ((u * point0 + v * point1 + (1-u-v) * point2) - ray.endpoint).magnitude();
+    return true;
 }
 
 // Compute the bounding box.  Return the bounding box of only the triangle whose
