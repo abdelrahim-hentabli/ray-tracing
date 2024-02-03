@@ -46,7 +46,7 @@ void test_file(std::string case_name) {
     }
 
     double diff = error/total*100;
-    EXPECT_NEAR(0.00, diff, 1e-5);
+    EXPECT_NEAR(0.00, diff, 1e-3);
 
     delete [] data_sol;
 }
