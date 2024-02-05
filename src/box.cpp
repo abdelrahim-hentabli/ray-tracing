@@ -42,7 +42,10 @@ bool Box::Intersection(const Ray& ray) const
 Box Box::Union(const Box& bb) const
 {
     Box box;
-    TODO;
+    for(int axis = 0; axis < 3; axis++){
+        box.hi[axis] = std::max(hi[axis], bb.hi[axis]);
+        box.lo[axis] = std::min(lo[axis], bb.lo[axis]);
+    }
     return box;
 }
 

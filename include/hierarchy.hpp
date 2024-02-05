@@ -10,10 +10,10 @@
   nodes in the last row are as far to the left as possible.  The tree
   entries occur in the vector called tree in the following order.
 
-          0
-     1       2
-   3   4   5   6
-  7 8 9
+        0
+      1     2
+   3    4  5 6
+  7 8  9
 
   Note that it is possible to compute the indices for the children of a
   node from the index of the parent.  It is also possible to compute the

@@ -157,6 +157,9 @@ bool Mesh::Intersect_Triangle(const Ray& ray, int tri, double& dist) const
 Box Mesh::Bounding_Box(int part) const
 {
     Box b;
-    TODO;
+    b.Make_Empty();
+    b.Include_Point(vertices[triangles[part][0]]);
+    b.Include_Point(vertices[triangles[part][1]]);
+    b.Include_Point(vertices[triangles[part][2]]);
     return b;
 }

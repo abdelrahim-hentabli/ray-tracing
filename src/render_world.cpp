@@ -24,8 +24,10 @@ Hit Render_World::Closest_Intersection(const Ray& ray)
 {
     Hit temp;
     Hit output {nullptr, std::numeric_limits<double>::max(), 0};
-    for (int i = 0 ; i < objects.size(); i++){
-        temp = objects[i]->Intersection(ray, -1);
+    std::vector<int> candidates;
+    hierarchy.Intersection_Candidates(ray, candidates);
+    for (int candidate : candidates){
+        temp = hierarchy.entries[candidate].obj->Intersection(ray,hierarchy.entries[candidate].part);
         if (temp.object != nullptr) {
             if(temp.dist < output.dist){
                 output = temp;
@@ -70,9 +72,13 @@ vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
 
 void Render_World::Initialize_Hierarchy()
 {
-    TODO; // Fill in hierarchy.entries; there should be one entry for
+    // Fill in hierarchy.entries; there should be one entry for
     // each part of each object.
-
+    for(Object* object: objects){
+        for(int i = 0; i < object->number_parts; i++){
+            hierarchy.entries.push_back({object,i,object->Bounding_Box(i)});
+        }
+    }
     hierarchy.Reorder_Entries();
     hierarchy.Build_Tree();
 }

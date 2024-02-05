@@ -28,6 +28,8 @@ vec3 Sphere::Normal(const vec3& point, int part) const
 Box Sphere::Bounding_Box(int part) const
 {
     Box box;
-    TODO; // calculate bounding box
+    vec3 radius_vector = {radius, radius, radius};
+    box.hi = center + radius_vector;
+    box.lo = center - radius_vector;
     return box;
 }
