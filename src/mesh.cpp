@@ -106,48 +106,43 @@ vec3 Mesh::Normal(const vec3& point, int part) const
 // two triangles.
 bool Mesh::Intersect_Triangle(const Ray& ray, int tri, double& dist) const
 {
-    vec3 point0 = vertices[triangles[tri][0]];
-    vec3 point1 = vertices[triangles[tri][1]];
-    vec3 point2 = vertices[triangles[tri][2]];
+    ivec3 triangle = triangles[tri];
+    vec3 point0 = vertices[triangle[0]];
+    vec3 point1 = vertices[triangle[1]];
+    vec3 point2 = vertices[triangle[2]];
     
     vec3 normal =  cross(point1 - point0, point2 - point0);
 
-    double denominator = normal.magnitude_squared();
+    double bespoke_weight_tolerance = normal.magnitude_squared() *  - weight_tol;
 
-    if(abs(dot(normal,ray.direction)) < 1e-4) {
+    if(abs(dot(normal,ray.direction)) < -1e-4) {
         return false;
     }
 
     double d = -dot(normal, point0);
 
     double t = -(dot(normal, ray.endpoint) + d) / dot(normal,ray.direction);
-    if (t < 0){
+    if (t < small_t){
         return false;
     }
 
     vec3 p = ray.endpoint + t * ray.direction;
 
     vec3 c = cross(point1 - point0, p - point0);
-
-    if (dot(normal,c) < weight_tolerance) {
+    if (dot(normal,c) < bespoke_weight_tolerance) {
         return false;
     }
 
     c = cross(point2 - point1, p - point1);
-    double u = dot(normal,c);
-    if (u < weight_tolerance){
+    if (dot(normal, c) < bespoke_weight_tolerance){
         return false;
     }
-    
     c = cross(point0 - point2, p - point2);
-    double v = dot(normal, c);
-    if (v < weight_tolerance) {
+    if (dot(normal, c) < bespoke_weight_tolerance) {
         return false;
     }
-    u /= denominator;
-    v /= denominator;
 
-    dist = ((u * point0 + v * point1 + (1-u-v) * point2) - ray.endpoint).magnitude();
+    dist = t;
     
     return true;
 }
