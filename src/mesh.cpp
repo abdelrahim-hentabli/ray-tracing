@@ -44,7 +44,39 @@ void Mesh::Read_Obj(const char* file)
 // Check for an intersection against the ray.  See the base class for details.
 Hit Mesh::Intersection(const Ray& ray, int part) const
 {
-    TODO;
+    double dist;
+    if(part >= 0){
+        if(part >= number_parts){
+            return {};
+        }
+        if(!Bounding_Box(part).Intersection(ray)){
+            return {};
+        }
+        if(Intersect_Triangle(ray,part,dist)){
+            return {this, dist, part};
+        }
+    }
+    else{
+        if(!box.Intersection(ray)){
+            return {};
+        }
+        int min_part = -1;
+        double min_dist = std::numeric_limits<double>::infinity();
+        for(int i = 0; i < number_parts; i++){
+            if(Intersect_Triangle(ray,i,dist)){
+                if(dist < min_dist){
+                    min_dist = dist;
+                    min_part = i;
+                }
+            }
+        }
+        if(min_part == -1){
+            return {};
+        }
+        else{
+            return {this,min_dist,min_part};
+        }
+    }
     return {};
 }
 
@@ -52,8 +84,12 @@ Hit Mesh::Intersection(const Ray& ray, int part) const
 vec3 Mesh::Normal(const vec3& point, int part) const
 {
     assert(part>=0);
-    TODO;
-    return vec3();
+    vec3 point0 = vertices[triangles[part][0]];
+    vec3 point1 = vertices[triangles[part][1]];
+    vec3 point2 = vertices[triangles[part][2]];
+
+    vec3 normal =  cross(point1 - point0, point2 - point0).normalized();
+    return normal;
 }
 
 // This is a helper routine whose purpose is to simplify the implementation
@@ -70,8 +106,45 @@ vec3 Mesh::Normal(const vec3& point, int part) const
 // two triangles.
 bool Mesh::Intersect_Triangle(const Ray& ray, int tri, double& dist) const
 {
-    TODO;
-    return false;
+    ivec3 triangle = triangles[tri];
+    vec3 point0 = vertices[triangle[0]];
+    vec3 point1 = vertices[triangle[1]];
+    vec3 point2 = vertices[triangle[2]];
+    
+    vec3 normal =  cross(point1 - point0, point2 - point0);
+
+    double bespoke_weight_tolerance = normal.magnitude_squared() *  - weight_tol;
+
+    if(abs(dot(normal,ray.direction)) < -1e-4) {
+        return false;
+    }
+
+    double d = -dot(normal, point0);
+
+    double t = -(dot(normal, ray.endpoint) + d) / dot(normal,ray.direction);
+    if (t < small_t){
+        return false;
+    }
+
+    vec3 p = ray.endpoint + t * ray.direction;
+
+    vec3 c = cross(point1 - point0, p - point0);
+    if (dot(normal,c) < bespoke_weight_tolerance) {
+        return false;
+    }
+
+    c = cross(point2 - point1, p - point1);
+    if (dot(normal, c) < bespoke_weight_tolerance){
+        return false;
+    }
+    c = cross(point0 - point2, p - point2);
+    if (dot(normal, c) < bespoke_weight_tolerance) {
+        return false;
+    }
+
+    dist = t;
+    
+    return true;
 }
 
 // Compute the bounding box.  Return the bounding box of only the triangle whose
@@ -79,6 +152,9 @@ bool Mesh::Intersect_Triangle(const Ray& ray, int tri, double& dist) const
 Box Mesh::Bounding_Box(int part) const
 {
     Box b;
-    TODO;
+    b.Make_Empty();
+    b.Include_Point(vertices[triangles[part][0]]);
+    b.Include_Point(vertices[triangles[part][1]]);
+    b.Include_Point(vertices[triangles[part][2]]);
     return b;
 }
