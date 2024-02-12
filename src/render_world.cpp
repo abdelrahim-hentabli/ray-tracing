@@ -48,7 +48,9 @@ void Render_World::Render_Pixel(const ivec2& pixel_index)
 
 void Render_World::Render()
 {
-    Initialize_Hierarchy();
+    if (!hierarchy_initialized) {
+        Initialize_Hierarchy();
+    }
 
     for(int j=0;j<camera.number_pixels[1];j++)
         for(int i=0;i<camera.number_pixels[0];i++)
@@ -72,6 +74,7 @@ vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
 
 void Render_World::Initialize_Hierarchy()
 {
+    hierarchy_initialized = true;
     // Fill in hierarchy.entries; there should be one entry for
     // each part of each object.
     for(Object* object: objects){

@@ -25,6 +25,7 @@ public:
     int recursion_depth_limit;
 
     Hierarchy hierarchy;
+    bool hierarchy_initialized = false;
 
     Render_World();
     ~Render_World();

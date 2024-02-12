@@ -7,7 +7,48 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-    delete[] colors;
+    if (colors) {
+        delete[] colors;
+    }
+}
+
+Camera::Camera(const Camera& other){
+    position            = other.position;
+    film_position       = other.film_position;
+    look_vector         = other.look_vector;
+    vertical_vector     = other.vertical_vector;
+    horizontal_vector   = other.horizontal_vector;
+    
+    min = other.min;
+    max = other.max;
+    
+    image_size    = other.image_size;
+    pixel_size    = other.pixel_size;
+    number_pixels = other.number_pixels;
+
+    colors=new Pixel[number_pixels[0]*number_pixels[1]];
+}
+
+Camera& Camera::operator=(const Camera &other){
+    position            = other.position;
+    film_position       = other.film_position;
+    look_vector         = other.look_vector;
+    vertical_vector     = other.vertical_vector;
+    horizontal_vector   = other.horizontal_vector;
+    
+    min = other.min;
+    max = other.max;
+    
+    image_size    = other.image_size;
+    pixel_size    = other.pixel_size;
+    number_pixels = other.number_pixels;
+
+    if (colors) {
+        delete[] colors;
+    }
+    colors=new Pixel[number_pixels[0]*number_pixels[1]];
+    
+    return *this;
 }
 
 void Camera::Position_And_Aim_Camera(const vec3& position_input,

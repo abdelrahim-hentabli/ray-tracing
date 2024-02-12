@@ -41,6 +41,9 @@ public:
     
     Camera();
     ~Camera();
+    Camera(const Camera& other);
+    Camera& operator=(const Camera &other);
+
 
     // Used for setting up camera parameters
     void Position_And_Aim_Camera(const vec3& position_input,
