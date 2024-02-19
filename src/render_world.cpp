@@ -13,7 +13,8 @@ Render_World::Render_World()
 
 Render_World::~Render_World()
 {
-    delete background_shader;
+    if(!background_shader)
+        delete background_shader;
     for(size_t i=0;i<objects.size();i++) delete objects[i];
     for(size_t i=0;i<lights.size();i++) delete lights[i];
 }
@@ -74,6 +75,9 @@ vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
 
 void Render_World::Initialize_Hierarchy()
 {
+    if (hierarchy_initialized){
+        return;
+    }
     hierarchy_initialized = true;
     // Fill in hierarchy.entries; there should be one entry for
     // each part of each object.
@@ -84,4 +88,12 @@ void Render_World::Initialize_Hierarchy()
     }
     hierarchy.Reorder_Entries();
     hierarchy.Build_Tree();
+}
+
+void Render_World::Clear_Hierarchy()
+{
+    hierarchy_initialized = false;
+
+    hierarchy.entries.clear();
+    hierarchy.tree.clear();
 }

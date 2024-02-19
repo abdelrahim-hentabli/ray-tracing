@@ -4,6 +4,10 @@
 #include "gtest/gtest.h"
 #include "dump_png.hpp"
 #include "parse.hpp"
+#include "mesh.hpp"
+#include "flat_shader.hpp"
+#include "phong_shader.hpp"
+#include "point_light.hpp"
 
 #include "directories.hpp"
 
@@ -144,4 +148,47 @@ TEST(simple, test_29) {
 }
 
 
+Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP, vec3 cameraL, vec3 cameraU) {
+    Render_World world;
+
+    // Setup world
+    world.enable_shadows  = false;
+    world.recursion_depth_limit = 1;
+    world.background_shader=new Flat_Shader(world,vec3());
+
+    // Setup objects
+    Mesh* o=new Mesh;
+    o->Read_Obj("sphere.obj");
+    o->material_shader = new Phong_Shader(world, {1,1,1}, {1,1,1}, {1,1,1}, 50);
+    world.objects.push_back(o);
+
+    // Setup lights
+    world.lights.push_back(new Point_Light(vec3(.8, .8, 4), vec3(1,1,1), 100));
+    world.ambient_color     = {1,1,1};
+    world.ambient_intensity = 0;
+    
+    // Setup Camera
+    world.camera.Position_And_Aim_Camera(cameraP,cameraL,cameraU);
+    world.camera.Focus_Camera(1,(double)width/height,70*(pi/180));
+
+    world.camera.Set_Resolution(ivec2(width,height));
+
+    return world;
+}
+
+void test_benchmark() {
+    int width = 640;
+    int height = 480;
+    Render_World world = std::move(SetupBenchmarkWorld(width,height, vec3(0,0,2), vec3(0,0,0), vec3(0,1,0)));
+
+    // Render the image
+    world.Render();
+
+    // Save the rendered image to disk
+    Dump_png(world.camera.colors,width,height, "bench_out.png");
+}
+
+TEST(simple, bench) {
+    test_benchmark();
+}
 #endif // TEST_FILE_HPP
