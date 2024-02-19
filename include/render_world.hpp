@@ -29,6 +29,11 @@ public:
 
     Render_World();
     ~Render_World();
+    Render_World(Render_World&& other) = default;
+    Render_World& operator=(Render_World&& other) = default;
+
+    Render_World(const Render_World& other) = delete;
+    Render_World& operator=(const Render_World& other) = delete;
 
     void Render_Pixel(const ivec2& pixel_index);
     void Render();

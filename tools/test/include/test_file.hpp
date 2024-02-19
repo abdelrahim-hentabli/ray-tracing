@@ -179,7 +179,7 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP, vec3 camer
 void test_benchmark() {
     int width = 640;
     int height = 480;
-    Render_World world = SetupBenchmarkWorld(width,height, vec3(0,0,2), vec3(0,0,0), vec3(0,1,0));
+    Render_World world = std::move(SetupBenchmarkWorld(width,height, vec3(0,0,2), vec3(0,0,0), vec3(0,1,0)));
 
     // Render the image
     world.Render();
