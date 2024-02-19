@@ -33,6 +33,7 @@ public:
     void Render_Pixel(const ivec2& pixel_index);
     void Render();
     void Initialize_Hierarchy();
+    void Clear_Hierarchy();
 
     vec3 Cast_Ray(const Ray& ray,int recursion_depth);
     Hit Closest_Intersection(const Ray& ray);

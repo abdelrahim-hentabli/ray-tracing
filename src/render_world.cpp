@@ -85,3 +85,11 @@ void Render_World::Initialize_Hierarchy()
     hierarchy.Reorder_Entries();
     hierarchy.Build_Tree();
 }
+
+void Render_World::Clear_Hierarchy()
+{
+    hierarchy_initialized = false;
+
+    hierarchy.entries.clear();
+    hierarchy.tree.clear();
+}
