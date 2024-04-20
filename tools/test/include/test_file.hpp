@@ -22,9 +22,6 @@ void test_file(std::string case_name) {
     // Render the image
     world.Render();
 
-    // Save the rendered image to disk
-    Dump_png(world.camera.colors,width,height, (case_name + ".png").c_str());
-
     int width2 = 0, height2 = 0;
     Pixel* data_sol = 0;
 
