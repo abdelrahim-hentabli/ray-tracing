@@ -34,4 +34,5 @@ public:
 
     Bounding_Box Union(const Bounding_Box& bb) const;
 };
+
 #endif

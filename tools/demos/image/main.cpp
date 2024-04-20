@@ -1,8 +1,12 @@
-#include "render_world.hpp"
-#include "object.hpp"
 #include <iostream>
 #include <cstdio>
 #include <unistd.h>
+// ray_tracer
+#include "render_world.hpp"
+#include "object.hpp"
+// tool_common
+#include "parse.hpp"
+#include "dump_png.hpp"
 
 /*
 
@@ -56,10 +60,6 @@ void Usage(const char* exec)
     exit(1);
 }
 
-void Parse(Render_World& world,int& width,int& height,const char* test_file);
-void Dump_png(Pixel* data,int width,int height,const char* filename);
-void Read_png(Pixel*& data,int& width,int& height,const char* filename);
-
 int main(int argc, char** argv)
 {
     const char* solution_file = 0;
@@ -87,7 +87,7 @@ int main(int argc, char** argv)
     int width=0;
     int height=0;
     Render_World world;
-    
+
     // Parse test scene file
     Parse(world,width,height,input_file);
 
