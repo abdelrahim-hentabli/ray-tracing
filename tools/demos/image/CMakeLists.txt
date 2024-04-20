@@ -7,5 +7,4 @@ target_include_directories(image_demo
 
 target_link_libraries(image_demo
     PRIVATE ray_tracer
-    PRIVATE tool_common
-)
+    PRIVATE tool_common)

@@ -14,5 +14,4 @@ target_include_directories(tool_common
 )
 
 target_link_libraries(tool_common
-    PUBLIC ${PNG_LIBRARY}
-)
+    PUBLIC ${PNG_LIBRARY})
