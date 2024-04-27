@@ -4,10 +4,10 @@
 #include "gtest/gtest.h"
 #include "dump_png.hpp"
 #include "parse.hpp"
-#include "mesh.hpp"
-#include "flat_shader.hpp"
-#include "phong_shader.hpp"
-#include "point_light.hpp"
+#include "objects/mesh.hpp"
+#include "shaders/flat_shader.hpp"
+#include "shaders/phong_shader.hpp"
+#include "lights/point_light.hpp"
 
 #include "directories.hpp"
 
@@ -15,7 +15,7 @@ void test_file(std::string case_name) {
     int width=0;
     int height=0;
     Render_World world;
-    
+
     // Parse test scene file
     Parse(world,width,height, (getCasesDir() + case_name + ".txt").c_str());
 
@@ -163,7 +163,7 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP, vec3 camer
     world.lights.push_back(new Point_Light(vec3(.8, .8, 4), vec3(1,1,1), 100));
     world.ambient_color     = {1,1,1};
     world.ambient_intensity = 0;
-    
+
     // Setup Camera
     world.camera.Position_And_Aim_Camera(cameraP,cameraL,cameraU);
     world.camera.Focus_Camera(1,(double)width/height,70*(pi/180));

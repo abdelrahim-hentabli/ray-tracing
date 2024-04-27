@@ -3,15 +3,15 @@
 #include <map>
 #include <sstream>
 #include <string>
-#include "direction_light.hpp"
-#include "flat_shader.hpp"
-#include "mesh.hpp"
-#include "phong_shader.hpp"
-#include "plane.hpp"
-#include "point_light.hpp"
-#include "reflective_shader.hpp"
-#include "sphere.hpp"
-#include "spot_light.hpp"
+#include "lights/direction_light.hpp"
+#include "shaders/flat_shader.hpp"
+#include "objects/mesh.hpp"
+#include "shaders/phong_shader.hpp"
+#include "objects/plane.hpp"
+#include "lights/point_light.hpp"
+#include "shaders/reflective_shader.hpp"
+#include "objects/sphere.hpp"
+#include "lights/spot_light.hpp"
 
 void Parse(Render_World& world,int& width,int& height,const char* test_file)
 {
@@ -26,7 +26,7 @@ void Parse(Render_World& world,int& width,int& height,const char* test_file)
     char buff[1000];
     vec3 u,v,w;
     std::string name,s0,s1,s2;
-    
+
     std::map<std::string,vec3> colors;
     std::map<std::string,Object*> objects;
     std::map<std::string,Shader*> shaders;

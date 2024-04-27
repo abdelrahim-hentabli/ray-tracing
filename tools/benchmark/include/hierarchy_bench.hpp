@@ -2,14 +2,14 @@
 #define __BENCHMARK_HIERARCHY_HPP__
 
 #include <benchmark/benchmark.h>
-#include "hierarchy.hpp"
+#include "acceleration_structures/hierarchy.hpp"
 #include "directories.hpp"
 #include "render_world.hpp"
 #include "parse.hpp"
-#include "point_light.hpp"
-#include "mesh.hpp"
-#include "flat_shader.hpp"
-#include "phong_shader.hpp"
+#include "lights/point_light.hpp"
+#include "objects/mesh.hpp"
+#include "shaders/flat_shader.hpp"
+#include "shaders/phong_shader.hpp"
 
 
 Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP, vec3 cameraL, vec3 cameraU) {
@@ -30,13 +30,13 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP, vec3 camer
     world.lights.push_back(new Point_Light(vec3(.8, .8, 4), vec3(1,1,1), 100));
     world.ambient_color     = {1,1,1};
     world.ambient_intensity = 0;
-    
+
     // Setup Camera
     world.camera.Position_And_Aim_Camera(cameraP,cameraL,cameraU);
     world.camera.Focus_Camera(1,(double)width/height,70*(pi/180));
-    
+
     world.camera.Set_Resolution(ivec2(width,height));
-    
+
     return world;
 }
 
@@ -44,7 +44,7 @@ static void BM_setupHierarchy(benchmark::State& state) {
     int width=0;
     int height=0;
     Render_World world = std::move(SetupBenchmarkWorld(640,480, vec3(0,0,1), vec3(0,0,0), vec3(0,1,0)));
-    
+
     for (auto _ : state) {
         world.Initialize_Hierarchy();
         world.Clear_Hierarchy();
@@ -62,29 +62,29 @@ public:
 
         // Parse test scene file
         world = std::move(SetupBenchmarkWorld(width,height, vec3(0,0,2), look, up));
-        world.Initialize_Hierarchy();        
-        
+        world.Initialize_Hierarchy();
+
         cardinal_directions = std::vector<vec3>(6);
         direction_names = std::vector<std::string>(6);
-    
+
         cardinal_directions[0] = {0,0,2};
         direction_names[0] = "north";
-        
+
         cardinal_directions[1] = {2,0,0};
         direction_names[1] = "east";
-        
+
         cardinal_directions[2] = {0,0,-2};
         direction_names[2] = "south";
-        
+
         cardinal_directions[3] = {-2,0,0};
         direction_names[3] = "west";
-        
+
         cardinal_directions[4] = {0,2,0};
         direction_names[4] = "up";
 
         cardinal_directions[5] = {0,-2,0};
         direction_names[5] = "down";
-        
+
         for(int i = 0; i < cardinal_directions.size(); i++){
             vec3 direction = cardinal_directions[i];
             if (i > 3){
@@ -117,7 +117,7 @@ BENCHMARK_DEFINE_F(IntersectionCandidatesFixture, NominalDirections)(benchmark::
     Ray ray;
     int current_camera_index = state.range(0);
     state.SetLabel(direction_names[current_camera_index]);
-    
+
     world.camera = nominal_direction_cameras[current_camera_index];
 
     for (auto _ : state) {

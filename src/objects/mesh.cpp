@@ -1,4 +1,5 @@
-#include "mesh.hpp"
+#include "objects/mesh.hpp"
+
 #include <fstream>
 #include <string>
 #include <limits>
@@ -110,7 +111,7 @@ bool Mesh::Intersect_Triangle(const Ray& ray, int tri, double& dist) const
     vec3 point0 = vertices[triangle[0]];
     vec3 point1 = vertices[triangle[1]];
     vec3 point2 = vertices[triangle[2]];
-    
+
     vec3 normal =  cross(point1 - point0, point2 - point0);
 
     double bespoke_weight_tolerance = normal.magnitude_squared() *  - weight_tol;
@@ -143,7 +144,7 @@ bool Mesh::Intersect_Triangle(const Ray& ray, int tri, double& dist) const
     }
 
     dist = t;
-    
+
     return true;
 }
 

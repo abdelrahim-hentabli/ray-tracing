@@ -1,7 +1,7 @@
 #ifndef __FLAT_SHADER_H__
 #define __FLAT_SHADER_H__
 
-#include "shader.hpp"
+#include "shaders/shader.hpp"
 
 class Flat_Shader : public Shader
 {

@@ -3,8 +3,8 @@
 
 #include <vector>
 #include "camera.hpp"
-#include "hierarchy.hpp"
-#include "object.hpp"
+#include "acceleration_structures/hierarchy.hpp"
+#include "objects/object.hpp"
 
 class Light;
 class Shader;
