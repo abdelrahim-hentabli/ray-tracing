@@ -1,5 +1,14 @@
 find_package(PNG REQUIRED)
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
+    libavutil
+    libavcodec
+    libavformat
+    libswscale
+    libswresample
+)
+
 file(GLOB TOOL_COMMON_SOURCES *.cpp)
 
 add_library(tool_common OBJECT ${TOOL_COMMON_SOURCES})
@@ -12,4 +21,6 @@ target_include_directories(tool_common
     PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
 target_link_libraries(tool_common
-    PUBLIC ${PNG_LIBRARY})
+    PRIVATE ray_tracer
+    PRIVATE ${PNG_LIBRARY}
+    PRIVATE PkgConfig::LIBAV)
