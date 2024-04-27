@@ -176,13 +176,40 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP, vec3 camer
 void test_benchmark() {
     int width = 640;
     int height = 480;
-    Render_World world = std::move(SetupBenchmarkWorld(width,height, vec3(0,0,2), vec3(0,0,0), vec3(0,1,0)));
+    Render_World world = SetupBenchmarkWorld(width,height, vec3(0,0,2), vec3(0,0,0), vec3(0,1,0));
 
     // Render the image
     world.Render();
 
-    // Save the rendered image to disk
-    Dump_png(world.camera.colors,width,height, "bench_out.png");
+    // Compare agains stored image for test
+    int width2 = 0, height2 = 0;
+    Pixel* data_sol = 0;
+
+    // Read solution from disk
+    Read_png(data_sol,width2,height2,(getTestSolutionsDir() + "bench.png").c_str());
+    assert(width==width2);
+    assert(height==height2);
+
+    // For each pixel, check to see if it matches solution
+    double error = 0, total = 0;
+    for(int i=0; i<height*width; i++)
+    {
+        vec3 a=From_Pixel(world.camera.colors[i]);
+        vec3 b=From_Pixel(data_sol[i]);
+        for(int c=0; c<3; c++)
+        {
+            double e = fabs(a[c]-b[c]);
+            error += e;
+            total++;
+            b[c] = e;
+        }
+        data_sol[i]=Pixel_Color(b);
+    }
+
+    double diff = error/total*100;
+    EXPECT_NEAR(0.00, diff, 1e-3);
+
+    delete [] data_sol;
 }
 
 TEST(simple, bench) {
