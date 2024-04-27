@@ -1,29 +1,30 @@
+#include "acceleration_structures/box.hpp"
+
 #include <limits>
-#include "box.hpp"
 
 // Return whether the ray intersects this box.
 bool Box::Intersection(const Ray& ray) const
 {
     double tmin = (lo[0] - ray.endpoint[0]) / ray.direction[0];
     double tmax = (hi[0] - ray.endpoint[0]) / ray.direction[0];
-    
+
     if (tmin > tmax) {
-        std::swap(tmin, tmax); 
+        std::swap(tmin, tmax);
     }
 
     double tymin = (lo[1] - ray.endpoint[1]) / ray.direction[1];
     double tymax = (hi[1] - ray.endpoint[1]) / ray.direction[1];
-    
+
     if (tymin > tymax) {
-        std::swap(tymin, tymax); 
+        std::swap(tymin, tymax);
     }
     if ((tmin > tymax) || (tymin > tmax)) {
-        return false; 
+        return false;
     }
-    
+
     tmin = std::max(tmin,tymin);
     tmax = std::min(tmax,tymax);
-    
+
     double tzmin = (lo[2] - ray.endpoint[2]) / ray.direction[2];
     double tzmax = (hi[2] - ray.endpoint[2]) / ray.direction[2];
 
@@ -32,9 +33,9 @@ bool Box::Intersection(const Ray& ray) const
     }
 
     if ((tmin > tzmax) || (tzmin > tmax)) {
-        return false; 
+        return false;
     }
-    
+
     return true;
 }
 

@@ -3,7 +3,7 @@
 #include <unistd.h>
 // ray_tracer
 #include "render_world.hpp"
-#include "object.hpp"
+#include "objects/object.hpp"
 // tool_common
 #include "parse.hpp"
 #include "dump_png.hpp"

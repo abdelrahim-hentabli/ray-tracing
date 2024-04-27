@@ -2,14 +2,14 @@
 #define __REFLECTIVE_SHADER_H__
 
 #include <algorithm>
-#include "shader.hpp"
+#include "shaders/shader.hpp"
 
 class Reflective_Shader : public Shader
 {
 public:
     Shader* shader;
     double reflectivity;
-    
+
     Reflective_Shader(Render_World& world_input,Shader* shader_input,double reflectivity)
         :Shader(world_input),shader(shader_input),
         reflectivity(std::max(0.0,std::min(1.0,reflectivity)))

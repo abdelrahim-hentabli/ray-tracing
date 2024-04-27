@@ -1,7 +1,8 @@
+#include "acceleration_structures/hierarchy.hpp"
+
 #include <algorithm>
 #include <numeric>
 #include <queue>
-#include "hierarchy.hpp"
 
 // Reorder the entries vector so that adjacent entries tend to be nearby.
 // You may want to implement box.cpp first.

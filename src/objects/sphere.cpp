@@ -1,4 +1,4 @@
-#include "sphere.hpp"
+#include "objects/sphere.hpp"
 #include "ray.hpp"
 
 // Determine if the ray intersects with the sphere
@@ -15,7 +15,7 @@ Hit Sphere::Intersection(const Ray& ray, int part) const
     }
 
     float t1c = sqrt(radius * radius - dist_to_center_squared);
-    
+
     return {this,tc - t1c,0};
 }
 

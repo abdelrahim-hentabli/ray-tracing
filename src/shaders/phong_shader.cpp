@@ -1,8 +1,9 @@
-#include "light.hpp"
-#include "phong_shader.hpp"
+#include "shaders/phong_shader.hpp"
+
+#include "lights/light.hpp"
 #include "ray.hpp"
 #include "render_world.hpp"
-#include "object.hpp"
+#include "objects/object.hpp"
 
 vec3 Phong_Shader::
 Shade_Surface(const Ray& ray, const vec3& intersection_point,
@@ -37,9 +38,9 @@ Shade_Surface(const Ray& ray, const vec3& intersection_point,
 
             reflectionDir = 2 * dot(normalizedLightDir, normal) * normal - normalizedLightDir;
             specular += currentLightIntensity * std::pow(std::max(0.0,dot(reflectionDir, -ray.direction)),specular_power);
-             
+
         }
-    }    
+    }
     vec3 color = specular * color_specular + world.ambient_intensity * color_ambient * world.ambient_color + diffuse * color_diffuse;
     return color;
 }

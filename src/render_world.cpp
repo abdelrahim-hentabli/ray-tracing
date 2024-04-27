@@ -1,9 +1,10 @@
 #include <limits>
 
 #include "render_world.hpp"
-#include "flat_shader.hpp"
-#include "object.hpp"
-#include "light.hpp"
+#include "shaders/flat_shader.hpp"
+#include "objects/object.hpp"
+#include "lights/light.hpp"
+#include "acceleration_structures/hierarchy.hpp"
 #include "ray.hpp"
 
 Render_World::Render_World()
@@ -61,7 +62,7 @@ void Render_World::Render()
 // cast ray and return the color of the closest intersected surface point,
 // or the background color if there is no object intersection
 vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
-{ 
+{
     vec3 color;
     Hit closest = Closest_Intersection(ray);
     if (closest.object != nullptr){

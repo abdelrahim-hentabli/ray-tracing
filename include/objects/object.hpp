@@ -2,7 +2,7 @@
 #define __OBJECT_H__
 
 #include <vector>
-#include "box.hpp"
+#include "acceleration_structures/box.hpp"
 #include "vec.hpp"
 
 // t has to be bigger than small_t to register an intersection with a ray.  You

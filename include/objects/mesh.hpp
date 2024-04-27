@@ -1,7 +1,7 @@
 #ifndef __MESH_H__
 #define __MESH_H__
 
-#include "object.hpp"
+#include "objects/object.hpp"
 
 // Consider a hit to be inside a triange if all barycentric weights
 // satisfy weight>=-weight_tol
@@ -12,7 +12,7 @@ class Mesh : public Object
     std::vector<vec3> vertices;
     std::vector<ivec3> triangles;
     Box box;
-    
+
 public:
     Mesh()
     {}
