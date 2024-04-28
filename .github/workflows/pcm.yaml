@@ -12,8 +12,9 @@ jobs:
           submodules: 'true'
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: libavutil-dev libavcodec-dev libswscale-dev libavformat-dev
-          version: 1.1
+          packages: ffmpeg
+          version: 1.0
+          execute_install_scripts: true
       - name: CMake config & build
         run:  |
           export PKG_CONFIG_PATH="/usr/local/x86_64-linux-gnu/lib/pkgconfig"
