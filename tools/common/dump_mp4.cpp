@@ -273,8 +273,8 @@ static void open_audio(AVFormatContext *oc, const AVCodec *codec,
   ost->tmp_frame = alloc_audio_frame(AV_SAMPLE_FMT_S16, &c->ch_layout,
                                      c->sample_rate, nb_samples);
 #else
-  ost->frame = alloc_audio_frame(c->sample_fmt, c->channel_layout, c->sample_rate,
-                                 nb_samples);
+  ost->frame = alloc_audio_frame(c->sample_fmt, c->channel_layout,
+                                 c->sample_rate, nb_samples);
   ost->tmp_frame = alloc_audio_frame(AV_SAMPLE_FMT_S16, c->channel_layout,
                                      c->sample_rate, nb_samples);
 #endif
