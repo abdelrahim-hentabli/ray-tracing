@@ -147,7 +147,7 @@ static void add_stream(OutputStream *ost, AVFormatContext *oc,
         }
       }
 
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
       av_channel_layout_copy(&c->ch_layout, &temp);
 #else
       c->channels = av_get_channel_layout_nb_channels(c->channel_layout);
@@ -203,7 +203,7 @@ static void add_stream(OutputStream *ost, AVFormatContext *oc,
 /**************************************************************/
 /* audio output */
 
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
 static AVFrame *alloc_audio_frame(enum AVSampleFormat sample_fmt,
                                   const AVChannelLayout *channel_layout,
                                   int sample_rate, int nb_samples) {
@@ -219,7 +219,7 @@ static AVFrame *alloc_audio_frame(enum AVSampleFormat sample_fmt,
   }
 
   frame->format = sample_fmt;
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
   av_channel_layout_copy(&frame->ch_layout, channel_layout);
 #else
   frame->channel_layout = channel_layout;
@@ -287,7 +287,7 @@ static void open_audio(AVFormatContext *oc, const AVCodec *codec,
   }
 
   /* set options */
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
   av_opt_set_chlayout(ost->swr_ctx, "in_chlayout", &c->ch_layout, 0);
   av_opt_set_chlayout(ost->swr_ctx, "out_chlayout", &c->ch_layout, 0);
 #else
@@ -320,7 +320,7 @@ static AVFrame *get_audio_frame(OutputStream *ost) {
 
   for (j = 0; j < frame->nb_samples; j++) {
     v = (int)(sin(ost->t) * 10000);
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
     for (i = 0; i < ost->enc->ch_layout.nb_channels; i++) *q++ = v;
 #else
     for (i = 0; i < ost->enc->channels; i++) *q++ = v;
