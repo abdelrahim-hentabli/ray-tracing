@@ -159,7 +159,7 @@ static void add_stream(OutputStream *ost, AVFormatContext *oc,
       av_channel_layout_copy(&c->ch_layout, &temp);
 #else
       c->channels = av_get_channel_layout_nb_channels(c->channel_layout);
-      c->channel_layout = temp;
+      c->channel_layout = AV_CHANNEL_LAYOUT_STEREO;
       if ((*codec)->channel_layouts) {
         c->channel_layout = (*codec)->channel_layouts[0];
         for (i = 0; (*codec)->channel_layouts[i]; i++) {
