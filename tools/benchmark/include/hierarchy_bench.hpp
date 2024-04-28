@@ -1,6 +1,8 @@
 #ifndef __BENCHMARK_HIERARCHY_HPP__
 #define __BENCHMARK_HIERARCHY_HPP__
 
+#include <benchmark/benchmark.h>
+
 #include "acceleration_structures/hierarchy.hpp"
 #include "directories.hpp"
 #include "lights/point_light.hpp"
@@ -9,7 +11,6 @@
 #include "render_world.hpp"
 #include "shaders/flat_shader.hpp"
 #include "shaders/phong_shader.hpp"
-#include <benchmark/benchmark.h>
 
 Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP,
                                  vec3 cameraL, vec3 cameraU) {
@@ -56,7 +57,7 @@ static void BM_setupHierarchy(benchmark::State &state) {
 BENCHMARK(BM_setupHierarchy);
 
 class IntersectionCandidatesFixture : public benchmark::Fixture {
-public:
+ public:
   void SetUp(::benchmark::State &state) {
     Camera tempCamera;
     vec3 look = {0, 0, 0};
@@ -104,7 +105,7 @@ public:
 
   void TearDown(::benchmark::State &state) {}
 
-public:
+ public:
   std::vector<vec3> cardinal_directions;
   std::vector<std::string> direction_names;
   int width = 640;
@@ -137,4 +138,4 @@ BENCHMARK_REGISTER_F(IntersectionCandidatesFixture, NominalDirections)
     ->Name("IntersectionCandidatesByDirection")
     ->DenseRange(0, 5, 1);
 
-#endif // __BENCHMARK_HIERARCHY_HPP__
+#endif  // __BENCHMARK_HIERARCHY_HPP__

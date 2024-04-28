@@ -134,52 +134,52 @@ static void add_stream(OutputStream *ost, AVFormatContext *oc,
 
   const AVChannelLayout temp = AV_CHANNEL_LAYOUT_STEREO;
   switch ((*codec)->type) {
-  case AVMEDIA_TYPE_AUDIO:
-    c->sample_fmt =
-        (*codec)->sample_fmts ? (*codec)->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
-    c->bit_rate = 64000;
-    c->sample_rate = 44100;
-    if ((*codec)->supported_samplerates) {
-      c->sample_rate = (*codec)->supported_samplerates[0];
-      for (i = 0; (*codec)->supported_samplerates[i]; i++) {
-        if ((*codec)->supported_samplerates[i] == 44100)
-          c->sample_rate = 44100;
+    case AVMEDIA_TYPE_AUDIO:
+      c->sample_fmt =
+          (*codec)->sample_fmts ? (*codec)->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
+      c->bit_rate = 64000;
+      c->sample_rate = 44100;
+      if ((*codec)->supported_samplerates) {
+        c->sample_rate = (*codec)->supported_samplerates[0];
+        for (i = 0; (*codec)->supported_samplerates[i]; i++) {
+          if ((*codec)->supported_samplerates[i] == 44100)
+            c->sample_rate = 44100;
+        }
       }
-    }
 
-    av_channel_layout_copy(&c->ch_layout, &temp);
-    ost->st->time_base = (AVRational){1, c->sample_rate};
-    break;
+      av_channel_layout_copy(&c->ch_layout, &temp);
+      ost->st->time_base = (AVRational){1, c->sample_rate};
+      break;
 
-  case AVMEDIA_TYPE_VIDEO:
-    c->codec_id = codec_id;
+    case AVMEDIA_TYPE_VIDEO:
+      c->codec_id = codec_id;
 
-    c->bit_rate = 8388608;
-    /* Resolution must be a multiple of two. */
-    c->width = 1440;
-    c->height = 1080;
-    /* timebase: This is the fundamental unit of time (in seconds) in terms
-     * of which frame timestamps are represented. For fixed-fps content,
-     * timebase should be 1/framerate and timestamp increments should be
-     * identical to 1. */
-    ost->st->time_base = (AVRational){1, STREAM_FRAME_RATE};
-    c->time_base = ost->st->time_base;
+      c->bit_rate = 8388608;
+      /* Resolution must be a multiple of two. */
+      c->width = 1440;
+      c->height = 1080;
+      /* timebase: This is the fundamental unit of time (in seconds) in terms
+       * of which frame timestamps are represented. For fixed-fps content,
+       * timebase should be 1/framerate and timestamp increments should be
+       * identical to 1. */
+      ost->st->time_base = (AVRational){1, STREAM_FRAME_RATE};
+      c->time_base = ost->st->time_base;
 
-    c->gop_size = 12; /* emit one intra frame every twelve frames at most */
-    c->pix_fmt = AV_PIX_FMT_YUV420P;
-    if (c->codec_id == AV_CODEC_ID_MPEG2VIDEO) {
-      /* just for testing, we also add B-frames */
-      c->max_b_frames = 2;
-    }
-    if (c->codec_id == AV_CODEC_ID_MPEG1VIDEO) {
-      /* Needed to avoid using macroblocks in which some coeffs overflow.
-       * This does not happen with normal video, it just happens here as
-       * the motion of the chroma plane does not match the luma plane. */
-      c->mb_decision = 2;
-    }
-    break;
-  default:
-    break;
+      c->gop_size = 12; /* emit one intra frame every twelve frames at most */
+      c->pix_fmt = AV_PIX_FMT_YUV420P;
+      if (c->codec_id == AV_CODEC_ID_MPEG2VIDEO) {
+        /* just for testing, we also add B-frames */
+        c->max_b_frames = 2;
+      }
+      if (c->codec_id == AV_CODEC_ID_MPEG1VIDEO) {
+        /* Needed to avoid using macroblocks in which some coeffs overflow.
+         * This does not happen with normal video, it just happens here as
+         * the motion of the chroma plane does not match the luma plane. */
+        c->mb_decision = 2;
+      }
+      break;
+    default:
+      break;
   }
 
   /* Some formats want stream headers to be separate. */
@@ -291,8 +291,7 @@ static AVFrame *get_audio_frame(OutputStream *ost) {
 
   for (j = 0; j < frame->nb_samples; j++) {
     v = (int)(sin(ost->t) * 10000);
-    for (i = 0; i < ost->enc->ch_layout.nb_channels; i++)
-      *q++ = v;
+    for (i = 0; i < ost->enc->ch_layout.nb_channels; i++) *q++ = v;
     ost->t += ost->tincr;
     ost->tincr += ost->tincr2;
   }
@@ -331,8 +330,7 @@ static int write_audio_frame(AVFormatContext *oc, OutputStream *ost) {
      * make sure we do not overwrite it here
      */
     ret = av_frame_make_writable(ost->frame);
-    if (ret < 0)
-      exit(1);
+    if (ret < 0) exit(1);
 
     /* convert to destination format */
     ret = swr_convert(ost->swr_ctx, ost->frame->data, dst_nb_samples,
@@ -359,8 +357,7 @@ static AVFrame *alloc_frame(enum AVPixelFormat pix_fmt, int width, int height) {
   int ret;
 
   frame = av_frame_alloc();
-  if (!frame)
-    return NULL;
+  if (!frame) return NULL;
 
   frame->format = pix_fmt;
   frame->width = width;
@@ -450,8 +447,7 @@ static AVFrame *get_video_frame(OutputStream *ost) {
 
   /* when we pass a frame to the encoder, it may keep a reference to it
    * internally; make sure we do not overwrite it here */
-  if (av_frame_make_writable(ost->frame) < 0)
-    exit(1);
+  if (av_frame_make_writable(ost->frame) < 0) exit(1);
 
   if (c->pix_fmt != AV_PIX_FMT_YUV420P) {
     /* as we only generate a YUV420P picture, we must convert it
@@ -508,8 +504,7 @@ int Dump_mp4(Pixel *data, int width, int height, const char *filename) {
 
   /* allocate the output media context */
   avformat_alloc_output_context2(&oc, NULL, NULL, filename);
-  if (!oc)
-    return 1;
+  if (!oc) return 1;
 
   fmt = oc->oformat;
 
@@ -528,11 +523,9 @@ int Dump_mp4(Pixel *data, int width, int height, const char *filename) {
 
   /* Now that all the parameters are set, we can open the audio and
    * video codecs and allocate the necessary encode buffers. */
-  if (have_video)
-    open_video(oc, video_codec, &video_st, opt);
+  if (have_video) open_video(oc, video_codec, &video_st, opt);
 
-  if (have_audio)
-    open_audio(oc, audio_codec, &audio_st, opt);
+  if (have_audio) open_audio(oc, audio_codec, &audio_st, opt);
 
   av_dump_format(oc, 0, filename, 1);
 
@@ -568,13 +561,10 @@ int Dump_mp4(Pixel *data, int width, int height, const char *filename) {
   av_write_trailer(oc);
 
   /* Close each codec. */
-  if (have_video)
-    close_stream(oc, &video_st);
-  if (have_audio)
-    close_stream(oc, &audio_st);
+  if (have_video) close_stream(oc, &video_st);
+  if (have_audio) close_stream(oc, &audio_st);
 
-  if (!(fmt->flags & AVFMT_NOFILE))
-    /* Close the output file. */
+  if (!(fmt->flags & AVFMT_NOFILE)) /* Close the output file. */
     avio_closep(&oc->pb);
 
   /* free the stream */

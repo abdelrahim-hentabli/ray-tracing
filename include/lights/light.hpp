@@ -1,18 +1,20 @@
 #ifndef __LIGHT_H__
 #define __LIGHT_H__
 
-#include "vec.hpp"
+#include <math.h>
+
 #include <iostream>
 #include <limits>
-#include <math.h>
 #include <vector>
+
+#include "vec.hpp"
 
 class Ray;
 
 class Light {
-public:
+ public:
   vec3 position;
-  vec3 color; // RGB color components
+  vec3 color;  // RGB color components
   double brightness;
 
   Light() : position(), color(1, 1, 1), brightness(1) {}

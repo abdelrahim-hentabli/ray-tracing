@@ -1,4 +1,5 @@
 #include "objects/sphere.hpp"
+
 #include "ray.hpp"
 
 // Determine if the ray intersects with the sphere

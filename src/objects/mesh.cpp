@@ -30,8 +30,7 @@ void Mesh::Read_Obj(const char *file) {
     }
 
     if (sscanf(line.c_str(), "f %d %d %d", &e[0], &e[1], &e[2]) == 3) {
-      for (int i = 0; i < 3; i++)
-        e[i]--;
+      for (int i = 0; i < 3; i++) e[i]--;
       triangles.push_back(e);
     }
   }

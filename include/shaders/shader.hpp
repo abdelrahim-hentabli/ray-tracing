@@ -8,7 +8,7 @@ class Ray;
 extern bool debug_pixel;
 
 class Shader {
-public:
+ public:
   Render_World &world;
 
   Shader(Render_World &world_input) : world(world_input) {}

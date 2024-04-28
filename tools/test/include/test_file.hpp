@@ -1,15 +1,14 @@
 #ifndef TEST_FILE_HPP
 #define TEST_FILE_HPP
 
+#include "directories.hpp"
 #include "dump_png.hpp"
+#include "gtest/gtest.h"
 #include "lights/point_light.hpp"
 #include "objects/mesh.hpp"
 #include "parse.hpp"
 #include "shaders/flat_shader.hpp"
 #include "shaders/phong_shader.hpp"
-#include "gtest/gtest.h"
-
-#include "directories.hpp"
 
 void test_file(std::string case_name) {
   int width = 0;
@@ -152,4 +151,4 @@ void test_benchmark() {
 }
 
 TEST(simple, bench) { test_benchmark(); }
-#endif // TEST_FILE_HPP
+#endif  // TEST_FILE_HPP

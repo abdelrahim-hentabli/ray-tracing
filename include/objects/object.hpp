@@ -1,9 +1,10 @@
 #ifndef __OBJECT_H__
 #define __OBJECT_H__
 
+#include <vector>
+
 #include "acceleration_structures/box.hpp"
 #include "vec.hpp"
-#include <vector>
 
 // t has to be bigger than small_t to register an intersection with a ray.  You
 // may need to tweak this value.
@@ -16,13 +17,13 @@ class Shader;
 class Object;
 
 struct Hit {
-  const Object *object; // object that was intersected
-  double dist;          // distance along ray to intersection location
-  int part;             // which part was intersected (eg, for meshes)
+  const Object *object;  // object that was intersected
+  double dist;           // distance along ray to intersection location
+  int part;              // which part was intersected (eg, for meshes)
 };
 
 class Object {
-public:
+ public:
   Shader *material_shader;
 
   // the number of parts that this object contains.

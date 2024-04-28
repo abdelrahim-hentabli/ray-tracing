@@ -1,17 +1,18 @@
 #ifndef __RENDER_WORLD_H__
 #define __RENDER_WORLD_H__
 
+#include <vector>
+
 #include "acceleration_structures/hierarchy.hpp"
 #include "camera.hpp"
 #include "objects/object.hpp"
-#include <vector>
 
 class Light;
 class Shader;
 class Ray;
 
 class Render_World {
-public:
+ public:
   Camera camera;
 
   Shader *background_shader;

@@ -1,15 +1,17 @@
 #ifndef __DIRECTION_LIGHT_H__
 #define __DIRECTION_LIGHT_H__
 
-#include "light.hpp"
-#include "vec.hpp"
+#include <math.h>
+
 #include <iostream>
 #include <limits>
-#include <math.h>
 #include <vector>
 
+#include "light.hpp"
+#include "vec.hpp"
+
 class Direction_Light : public Light {
-public:
+ public:
   Direction_Light(const vec3 &direction, const vec3 &color, double brightness)
       : Light(direction.normalized() * 1e10, color, brightness) {}
 

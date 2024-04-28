@@ -1,8 +1,9 @@
 #include "objects/plane.hpp"
 
-#include "ray.hpp"
 #include <cfloat>
 #include <limits>
+
+#include "ray.hpp"
 
 // Intersect with the half space defined by the plane.  The plane's normal
 // points outside.  If the ray starts on the "inside" side of the plane, be sure

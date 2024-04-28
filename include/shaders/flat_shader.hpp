@@ -4,7 +4,7 @@
 #include "shaders/shader.hpp"
 
 class Flat_Shader : public Shader {
-public:
+ public:
   vec3 color;
 
   Flat_Shader(Render_World &world_input, const vec3 &color = vec3(1, 1, 1))

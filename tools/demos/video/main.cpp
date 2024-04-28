@@ -1,6 +1,7 @@
+#include <unistd.h>
+
 #include <cstdio>
 #include <iostream>
-#include <unistd.h>
 // ray_tracer
 #include "objects/object.hpp"
 #include "render_world.hpp"

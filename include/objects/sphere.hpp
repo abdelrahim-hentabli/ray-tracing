@@ -7,7 +7,7 @@ class Sphere : public Object {
   vec3 center;
   double radius;
 
-public:
+ public:
   Sphere(const vec3 &center_input, double radius_input)
       : center(center_input), radius(radius_input) {}
 

@@ -1,6 +1,7 @@
+#include <unistd.h>
+
 #include <cstdio>
 #include <iostream>
-#include <unistd.h>
 // ray_tracer
 #include "objects/object.hpp"
 #include "render_world.hpp"
@@ -72,31 +73,29 @@ int main(int argc, char **argv) {
   // Parse commandline options
   while (1) {
     int opt = getopt(argc, argv, "s:i:m:o:x:y:h");
-    if (opt == -1)
-      break;
+    if (opt == -1) break;
     switch (opt) {
-    case 's':
-      solution_file = optarg;
-      break;
-    case 'i':
-      input_file = optarg;
-      break;
-    case 'o':
-      statistics_file = optarg;
-      break;
-    case 'x':
-      test_x = atoi(optarg);
-      break;
-    case 'y':
-      test_y = atoi(optarg);
-      break;
-    case 'h':
-      disable_hierarchy = true;
-      break;
+      case 's':
+        solution_file = optarg;
+        break;
+      case 'i':
+        input_file = optarg;
+        break;
+      case 'o':
+        statistics_file = optarg;
+        break;
+      case 'x':
+        test_x = atoi(optarg);
+        break;
+      case 'y':
+        test_y = atoi(optarg);
+        break;
+      case 'h':
+        disable_hierarchy = true;
+        break;
     }
   }
-  if (!input_file)
-    Usage(argv[0]);
+  if (!input_file) Usage(argv[0]);
 
   int width = 0;
   int height = 0;
@@ -152,11 +151,9 @@ int main(int argc, char **argv) {
     // Output information on how well it matches. Optionally save to file
     // to avoid getting confused by debugging print statements.
     FILE *stats_file = stdout;
-    if (statistics_file)
-      stats_file = fopen(statistics_file, "w");
+    if (statistics_file) stats_file = fopen(statistics_file, "w");
     fprintf(stats_file, "diff: %.2f\n", error / total * 100);
-    if (statistics_file)
-      fclose(stats_file);
+    if (statistics_file) fclose(stats_file);
 
     // Output images showing the error that was computed to aid debugging
     Dump_png(data_sol, width, height, "diff.png");

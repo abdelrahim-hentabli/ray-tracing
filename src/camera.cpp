@@ -66,8 +66,7 @@ void Camera::Focus_Camera(double focal_distance, double aspect_ratio,
 
 void Camera::Set_Resolution(const ivec2 &number_pixels_input) {
   number_pixels = number_pixels_input;
-  if (colors)
-    delete[] colors;
+  if (colors) delete[] colors;
   colors = new Pixel[number_pixels[0] * number_pixels[1]];
   min = -0.5 * image_size;
   max = 0.5 * image_size;

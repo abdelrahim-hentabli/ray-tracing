@@ -1,12 +1,13 @@
 #ifndef __BOX_H__
 #define __BOX_H__
 
-#include "misc.hpp"
-#include "ray.hpp"
 #include <limits>
 
+#include "misc.hpp"
+#include "ray.hpp"
+
 class Box {
-public:
+ public:
   // lowermost and uppermost corners of bounding box
   vec3 lo, hi;
 

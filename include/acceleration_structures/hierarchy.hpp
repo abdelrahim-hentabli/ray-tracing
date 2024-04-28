@@ -31,7 +31,7 @@ struct Entry {
 };
 
 class Hierarchy {
-public:
+ public:
   // List of primitives (or parts of primitives) that can be intersected
   std::vector<Entry> entries;
 

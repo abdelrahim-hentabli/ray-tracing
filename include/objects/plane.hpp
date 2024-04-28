@@ -4,7 +4,7 @@
 #include "objects/object.hpp"
 
 class Plane : public Object {
-public:
+ public:
   vec3 x1;
   vec3 normal;
 

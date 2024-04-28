@@ -1,4 +1,5 @@
-#include "hierarchy_bench.hpp"
 #include <benchmark/benchmark.h>
+
+#include "hierarchy_bench.hpp"
 
 BENCHMARK_MAIN();

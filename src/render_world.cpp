@@ -1,23 +1,23 @@
+#include "render_world.hpp"
+
 #include <limits>
 
 #include "acceleration_structures/hierarchy.hpp"
 #include "lights/light.hpp"
 #include "objects/object.hpp"
 #include "ray.hpp"
-#include "render_world.hpp"
 #include "shaders/flat_shader.hpp"
 
 Render_World::Render_World()
-    : background_shader(0), ambient_intensity(0), enable_shadows(true),
+    : background_shader(0),
+      ambient_intensity(0),
+      enable_shadows(true),
       recursion_depth_limit(3) {}
 
 Render_World::~Render_World() {
-  if (!background_shader)
-    delete background_shader;
-  for (size_t i = 0; i < objects.size(); i++)
-    delete objects[i];
-  for (size_t i = 0; i < lights.size(); i++)
-    delete lights[i];
+  if (!background_shader) delete background_shader;
+  for (size_t i = 0; i < objects.size(); i++) delete objects[i];
+  for (size_t i = 0; i < lights.size(); i++) delete lights[i];
 }
 
 // Find and return the Hit structure for the closest intersection.  Be careful
@@ -53,8 +53,7 @@ void Render_World::Render() {
   }
 
   for (int j = 0; j < camera.number_pixels[1]; j++)
-    for (int i = 0; i < camera.number_pixels[0]; i++)
-      Render_Pixel(ivec2(i, j));
+    for (int i = 0; i < camera.number_pixels[0]; i++) Render_Pixel(ivec2(i, j));
 }
 
 // cast ray and return the color of the closest intersected surface point,

@@ -7,8 +7,7 @@
 // Reorder the entries vector so that adjacent entries tend to be nearby.
 // You may want to implement box.cpp first.
 void Hierarchy::Reorder_Entries() {
-  if (!entries.size())
-    return;
+  if (!entries.size()) return;
   // sort based on bounding box lo, kinda stupid. But a start
   std::sort(entries.begin(), entries.end(), [](Entry first, Entry second) {
     return first.box.lo[1] < second.box.lo[1];
@@ -18,8 +17,7 @@ void Hierarchy::Reorder_Entries() {
 // Populate tree from entries.
 void Hierarchy::Build_Tree() {
   int n = entries.size();
-  if (!n)
-    return;
+  if (!n) return;
   tree = std::vector<Box>(2 * n - 1);
   for (int i = 0; i < n; i++) {
     tree[n - 1 + i] = entries[i].box;
@@ -34,8 +32,7 @@ void Hierarchy::Build_Tree() {
 void Hierarchy::Intersection_Candidates(const Ray &ray,
                                         std::vector<int> &candidates) const {
   int n = entries.size();
-  if (!n)
-    return;
+  if (!n) return;
   std::queue<int> check_nodes;
   check_nodes.push(0);
   int temp;

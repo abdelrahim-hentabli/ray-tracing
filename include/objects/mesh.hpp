@@ -12,7 +12,7 @@ class Mesh : public Object {
   std::vector<ivec3> triangles;
   Box box;
 
-public:
+ public:
   Mesh() {}
 
   virtual Hit Intersection(const Ray &ray, int part) const override;

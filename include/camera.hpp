@@ -1,9 +1,10 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
+#include <algorithm>
+
 #include "misc.hpp"
 #include "vec.hpp"
-#include <algorithm>
 
 typedef unsigned int Pixel;
 
@@ -19,23 +20,25 @@ inline vec3 From_Pixel(Pixel color) {
 }
 
 class Camera {
-public:
+ public:
   // Describes camera in space
-  vec3 position;      // camera position
-  vec3 film_position; // where (0.0, 0.0) in the image plane is located in space
-  vec3 look_vector; // points from the position to the focal point - normalized
-  vec3 vertical_vector;   // point up in the image plane - normalized
-  vec3 horizontal_vector; // points to the right on the image plane - normalized
+  vec3 position;  // camera position
+  vec3
+      film_position;  // where (0.0, 0.0) in the image plane is located in space
+  vec3 look_vector;  // points from the position to the focal point - normalized
+  vec3 vertical_vector;  // point up in the image plane - normalized
+  vec3
+      horizontal_vector;  // points to the right on the image plane - normalized
 
   // Describes the coordinate system of the image plane
-  vec2 min, max;   // coordinates of film corners: min = (left,bottom), max =
-                   // (right,top)
-  vec2 image_size; // physical dimensions of film
-  vec2 pixel_size; // physical dimensions of a pixel
+  vec2 min, max;    // coordinates of film corners: min = (left,bottom), max =
+                    // (right,top)
+  vec2 image_size;  // physical dimensions of film
+  vec2 pixel_size;  // physical dimensions of a pixel
 
   // Describes the pixels of the image
-  ivec2 number_pixels; // number of pixels: x and y direction
-  Pixel *colors;       // Pixel data; row-major order
+  ivec2 number_pixels;  // number of pixels: x and y direction
+  Pixel *colors;        // Pixel data; row-major order
 
   Camera();
   ~Camera();

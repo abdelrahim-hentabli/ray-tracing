@@ -1,5 +1,9 @@
 #include "parse.hpp"
 
+#include <map>
+#include <sstream>
+#include <string>
+
 #include "lights/direction_light.hpp"
 #include "lights/point_light.hpp"
 #include "lights/spot_light.hpp"
@@ -9,9 +13,6 @@
 #include "shaders/flat_shader.hpp"
 #include "shaders/phong_shader.hpp"
 #include "shaders/reflective_shader.hpp"
-#include <map>
-#include <sstream>
-#include <string>
 
 void Parse(Render_World &world, int &width, int &height,
            const char *test_file) {
@@ -33,8 +34,7 @@ void Parse(Render_World &world, int &width, int &height,
   while (fgets(buff, sizeof(buff), F)) {
     std::stringstream ss(buff);
     std::string item, name;
-    if (!(ss >> item) || !item.size() || item[0] == '#')
-      continue;
+    if (!(ss >> item) || !item.size() || item[0] == '#') continue;
     if (item == "size") {
       ss >> width >> height;
       assert(ss);

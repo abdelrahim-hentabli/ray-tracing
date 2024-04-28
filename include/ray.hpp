@@ -5,9 +5,9 @@
 
 class Object;
 class Ray {
-public:
-  vec3 endpoint;  // endpoint of the ray where t=0
-  vec3 direction; // direction the ray sweeps out - unit vector
+ public:
+  vec3 endpoint;   // endpoint of the ray where t=0
+  vec3 direction;  // direction the ray sweeps out - unit vector
 
   Ray() : endpoint(0, 0, 0), direction(0, 0, 1) {}
 
