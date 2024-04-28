@@ -16,5 +16,6 @@ jobs:
           version: 1.0
       - name: CMake config & build
         run:  |
+          export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig"
           cmake -B build .
           cmake --build build --parallel 4
