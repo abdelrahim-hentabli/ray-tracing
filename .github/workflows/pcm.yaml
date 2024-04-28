@@ -15,8 +15,6 @@ jobs:
           packages: libavutil-dev libavcodec-dev libavformat-dev libswscale-dev libswresample-dev
           version: 1.1
           execute_install_scripts: true
-      - name: FFMPEG library info
-        run: dpkg-query -L ffmpeg
       - name: CMake config & build
         run:  |
           export PKG_CONFIG_PATH="/usr/local/x86_64-linux-gnu/lib/pkgconfig"
