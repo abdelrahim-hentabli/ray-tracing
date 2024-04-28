@@ -267,10 +267,17 @@ static void open_audio(AVFormatContext *oc, const AVCodec *codec,
   else
     nb_samples = c->frame_size;
 
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
   ost->frame = alloc_audio_frame(c->sample_fmt, &c->ch_layout, c->sample_rate,
                                  nb_samples);
   ost->tmp_frame = alloc_audio_frame(AV_SAMPLE_FMT_S16, &c->ch_layout,
                                      c->sample_rate, nb_samples);
+#else
+  ost->frame = alloc_audio_frame(c->sample_fmt, c->channel_layout, c->sample_rate,
+                                 nb_samples);
+  ost->tmp_frame = alloc_audio_frame(AV_SAMPLE_FMT_S16, c->channel_layout,
+                                     c->sample_rate, nb_samples);
+#endif
 
   /* copy the stream parameters to the muxer */
   ret = avcodec_parameters_from_context(ost->st->codecpar, c);
