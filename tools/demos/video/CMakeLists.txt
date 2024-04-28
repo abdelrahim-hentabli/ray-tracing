@@ -1,11 +1,3 @@
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
-    libavutil
-    libavcodec
-    libavformat
-    libswscale
-    libswresample)
-
 add_executable(video_demo main.cpp)
 
 target_include_directories(video_demo
