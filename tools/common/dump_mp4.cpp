@@ -132,7 +132,10 @@ static void add_stream(OutputStream *ost, AVFormatContext *oc,
   }
   ost->enc = c;
 
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
   const AVChannelLayout temp = AV_CHANNEL_LAYOUT_STEREO;
+#endif
+
   switch ((*codec)->type) {
     case AVMEDIA_TYPE_AUDIO:
       c->sample_fmt =
