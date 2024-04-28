@@ -1,46 +1,45 @@
 #ifndef __RENDER_WORLD_H__
 #define __RENDER_WORLD_H__
 
-#include <vector>
-#include "camera.hpp"
 #include "acceleration_structures/hierarchy.hpp"
+#include "camera.hpp"
 #include "objects/object.hpp"
+#include <vector>
 
 class Light;
 class Shader;
 class Ray;
 
-class Render_World
-{
+class Render_World {
 public:
-    Camera camera;
+  Camera camera;
 
-    Shader *background_shader;
-    std::vector<Object*> objects;
-    std::vector<Light*> lights;
-    vec3 ambient_color;
-    double ambient_intensity;
+  Shader *background_shader;
+  std::vector<Object *> objects;
+  std::vector<Light *> lights;
+  vec3 ambient_color;
+  double ambient_intensity;
 
-    bool enable_shadows;
-    int recursion_depth_limit;
+  bool enable_shadows;
+  int recursion_depth_limit;
 
-    Hierarchy hierarchy;
-    bool hierarchy_initialized = false;
+  Hierarchy hierarchy;
+  bool hierarchy_initialized = false;
 
-    Render_World();
-    ~Render_World();
-    Render_World(Render_World&& other) = default;
-    Render_World& operator=(Render_World&& other) = default;
+  Render_World();
+  ~Render_World();
+  Render_World(Render_World &&other) = default;
+  Render_World &operator=(Render_World &&other) = default;
 
-    Render_World(const Render_World& other) = delete;
-    Render_World& operator=(const Render_World& other) = delete;
+  Render_World(const Render_World &other) = delete;
+  Render_World &operator=(const Render_World &other) = delete;
 
-    void Render_Pixel(const ivec2& pixel_index);
-    void Render();
-    void Initialize_Hierarchy();
-    void Clear_Hierarchy();
+  void Render_Pixel(const ivec2 &pixel_index);
+  void Render();
+  void Initialize_Hierarchy();
+  void Clear_Hierarchy();
 
-    vec3 Cast_Ray(const Ray& ray,int recursion_depth);
-    Hit Closest_Intersection(const Ray& ray);
+  vec3 Cast_Ray(const Ray &ray, int recursion_depth);
+  Hit Closest_Intersection(const Ray &ray);
 };
 #endif

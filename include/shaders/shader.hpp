@@ -7,19 +7,15 @@ class Ray;
 
 extern bool debug_pixel;
 
-class Shader
-{
+class Shader {
 public:
-    Render_World& world;
+  Render_World &world;
 
-    Shader(Render_World& world_input)
-        :world(world_input)
-    {}
+  Shader(Render_World &world_input) : world(world_input) {}
 
-    virtual ~Shader()
-    {}
+  virtual ~Shader() {}
 
-    virtual vec3 Shade_Surface(const Ray& ray,const vec3& intersection_point,
-        const vec3& normal,int recursion_depth) const=0;
+  virtual vec3 Shade_Surface(const Ray &ray, const vec3 &intersection_point,
+                             const vec3 &normal, int recursion_depth) const = 0;
 };
 #endif

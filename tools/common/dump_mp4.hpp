@@ -3,6 +3,6 @@
 
 typedef unsigned int Pixel;
 
-int Dump_mp4(Pixel* data,int width,int height,const char* filename);
+int Dump_mp4(Pixel *data, int width, int height, const char *filename);
 
 #endif // DUMP_MP4_HPP
