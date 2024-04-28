@@ -13,7 +13,7 @@ jobs:
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: libavutil-dev libavcodec-dev libswscale-dev libavformat-dev
-          version: 1.0
+          version: 1.1
       - name: CMake config & build
         run:  |
           export PKG_CONFIG_PATH="/usr/local/x86_64-linux-gnu/lib/pkgconfig"
