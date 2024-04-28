@@ -12,11 +12,10 @@ jobs:
           submodules: 'true'
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: libavutil-dev libavcodec-dev libavformat-dev libswscale-dev libswresample-dev
+          packages: libavutil59 libavcodec61 libavformat61 libswscale8 libswresample5
           version: 1.1
           execute_install_scripts: true
       - name: CMake config & build
         run:  |
-          export PKG_CONFIG_PATH="/usr/local/x86_64-linux-gnu/lib/pkgconfig"
           cmake -B build .
           cmake --build build --parallel 4
