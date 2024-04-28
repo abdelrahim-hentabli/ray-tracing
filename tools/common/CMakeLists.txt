@@ -1,5 +1,3 @@
-set (CMAKE_CXX_STANDARD 11)
-
 find_package(PNG REQUIRED)
 
 find_package(PkgConfig REQUIRED)
