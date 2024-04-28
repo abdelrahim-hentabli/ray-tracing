@@ -1,0 +1,25 @@
+name: pre-commit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  Build-And-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+      - name: install ffmpeg
+        run:  |
+          sudo apt-get update
+          sudo apt-get install ffmpeg
+      - run:  mkdir build
+      - run:  cd build
+      - name: Run Cmake Config step
+        run:  cmake ../ray-tracing
+      - name: Run build
+        run:  cmake --build . --parallel 4
