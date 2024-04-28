@@ -12,7 +12,7 @@ jobs:
           submodules: 'true'
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: ffmpeg
+          packages: libavutil libavcodec libavformat libswscale libswresample
           version: 1.0
           execute_install_scripts: true
       - name: FFMPEG library info
