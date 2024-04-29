@@ -18,7 +18,7 @@ jobs:
           execute_install_scripts: true
       - name: CMake config & build
         run:  |
-          cmake -B build .
+          cmake -B build -DCMAKE_BUILD_TYPE=Release .
           cmake --build build --parallel 4
       - name: Run test
         run: ./build/tools/test/tests
