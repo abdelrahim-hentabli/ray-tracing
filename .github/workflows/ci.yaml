@@ -22,5 +22,5 @@ jobs:
           cmake --build build --parallel 4
       - name: Run test
         run: ./build/tools/test/tests
-      - name: Run benchmarkß
+      - name: Run benchmark
         run: ./build/tools/benchmark/benchmarks
