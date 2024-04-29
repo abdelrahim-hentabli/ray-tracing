@@ -19,3 +19,5 @@ jobs:
         run:  |
           cmake -B build .
           cmake --build build --parallel 4
+      - name: Run test
+        run: ./build/tools/test/tests
