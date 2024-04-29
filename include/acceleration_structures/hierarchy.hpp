@@ -24,30 +24,29 @@
   The last n elements of tree correspond to the elements of entries (in order).
 */
 
-struct Entry
-{
-    Object* obj;
-    int part;
-    Box box;
+struct Entry {
+  Object *obj;
+  int part;
+  Box box;
 };
 
-class Hierarchy
-{
-public:
-    // List of primitives (or parts of primitives) that can be intersected
-    std::vector<Entry> entries;
+class Hierarchy {
+ public:
+  // List of primitives (or parts of primitives) that can be intersected
+  std::vector<Entry> entries;
 
-    // Flattened hierarchy
-    std::vector<Box> tree;
+  // Flattened hierarchy
+  std::vector<Box> tree;
 
-    // Reorder the entries vector so that adjacent entries tend to be nearby.
-    void Reorder_Entries();
+  // Reorder the entries vector so that adjacent entries tend to be nearby.
+  void Reorder_Entries();
 
-    // Populate tree from entries.
-    void Build_Tree();
+  // Populate tree from entries.
+  void Build_Tree();
 
-    // Return a list of candidates (indices into the entries list) whose
-    // bounding boxes intersect the ray.
-    void Intersection_Candidates(const Ray& ray, std::vector<int>& candidates) const;
+  // Return a list of candidates (indices into the entries list) whose
+  // bounding boxes intersect the ray.
+  void Intersection_Candidates(const Ray &ray,
+                               std::vector<int> &candidates) const;
 };
 #endif

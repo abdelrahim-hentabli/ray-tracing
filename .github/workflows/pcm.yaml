@@ -1,9 +1,8 @@
-name: CI
-run-name: CI on ${{ github.ref }} on ${{ github.sha }}
+name: pre-commit
+
 on:
-  push:
-    branches:
-     - main
+  pull_request:
+
 jobs:
   Build-And-test:
     runs-on: ubuntu-latest
@@ -22,5 +21,3 @@ jobs:
           cmake --build build --parallel 4
       - name: Run test
         run: ./build/tools/test/tests
-      - name: Run benchmark
-        run: ./build/tools/benchmark/benchmarks

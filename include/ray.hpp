@@ -4,23 +4,16 @@
 #include "vec.hpp"
 
 class Object;
-class Ray
-{
-public:
-    vec3 endpoint; // endpoint of the ray where t=0
-    vec3 direction; // direction the ray sweeps out - unit vector
+class Ray {
+ public:
+  vec3 endpoint;   // endpoint of the ray where t=0
+  vec3 direction;  // direction the ray sweeps out - unit vector
 
-    Ray()
-        :endpoint(0,0,0),direction(0,0,1)
-    {}
+  Ray() : endpoint(0, 0, 0), direction(0, 0, 1) {}
 
-    Ray(const vec3& endpoint_input,const vec3& direction_input)
-        :endpoint(endpoint_input),direction(direction_input.normalized())
-    {}
+  Ray(const vec3 &endpoint_input, const vec3 &direction_input)
+      : endpoint(endpoint_input), direction(direction_input.normalized()) {}
 
-    vec3 Point(double t) const
-    {
-        return endpoint+direction*t;
-    }
+  vec3 Point(double t) const { return endpoint + direction * t; }
 };
 #endif
