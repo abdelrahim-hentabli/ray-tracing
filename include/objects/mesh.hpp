@@ -11,6 +11,9 @@ class Mesh : public Object {
   std::vector<vec3> vertices;
   std::vector<ivec3> triangles;
   Box box;
+  // Describes updating the location and rotation of object
+  vec3 velocity;
+  vec3 acceleration;
 
  public:
   Mesh() {}
@@ -20,5 +23,8 @@ class Mesh : public Object {
   bool Intersect_Triangle(const Ray &ray, int tri, double &dist) const;
   void Read_Obj(const char *file);
   Box Bounding_Box(int part) const override;
+  void Update(float deltaT) override;
+
 };
+
 #endif

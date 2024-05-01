@@ -94,3 +94,11 @@ void Render_World::Clear_Hierarchy() {
   hierarchy.entries.clear();
   hierarchy.tree.clear();
 }
+
+void Render_World::Update(float deltaT) {
+  for (Object *object: objects) {
+    object->Update(deltaT);
+  }
+  camera.Update(deltaT);
+  hierarchy.Update();
+}

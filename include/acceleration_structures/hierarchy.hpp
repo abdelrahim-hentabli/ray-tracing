@@ -48,5 +48,8 @@ class Hierarchy {
   // bounding boxes intersect the ray.
   void Intersection_Candidates(const Ray &ray,
                                std::vector<int> &candidates) const;
+
+  void Update();
+
 };
 #endif

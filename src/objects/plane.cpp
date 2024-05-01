@@ -28,3 +28,7 @@ Box Plane::Bounding_Box(int part) const {
   b.lo = -b.hi;
   return b;
 }
+
+void Plane::Update(float deltaT) {
+
+}
