@@ -25,6 +25,7 @@ void Parse(Render_World &world, int &width, int &height,
   double f0;
   char buff[1000];
   vec3 u, v, w;
+  vec3 velocity, acceleration;
   std::string name, s0, s1, s2;
 
   std::map<std::string, vec3> colors;
@@ -128,10 +129,12 @@ void Parse(Render_World &world, int &width, int &height,
       world.ambient_color = c0->second;
       world.ambient_intensity = f0;
     } else if (item == "camera") {
-      ss >> u >> v >> w >> f0;
+      ss >> u >> v >> w >> f0 >> velocity >> acceleration;
       assert(ss);
       world.camera.Position_And_Aim_Camera(u, v, w);
       world.camera.Focus_Camera(1, (double)width / height, f0 * (pi / 180));
+      world.camera.velocity = velocity;
+      world.camera.acceleration = acceleration;
     } else if (item == "background") {
       ss >> s0;
       assert(ss);
