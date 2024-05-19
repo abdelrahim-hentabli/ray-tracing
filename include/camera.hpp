@@ -40,6 +40,10 @@ class Camera {
   ivec2 number_pixels;  // number of pixels: x and y direction
   Pixel *colors;        // Pixel data; row-major order
 
+  // Describes updating the location and rotation of camera
+  vec3 velocity;
+  vec3 acceleration;
+
   Camera();
   ~Camera();
   Camera(const Camera &other);
@@ -65,5 +69,6 @@ class Camera {
     int j = pixel_index[1];
     colors[j * number_pixels[0] + i] = color;
   }
+  void Update(double deltaT);
 };
 #endif

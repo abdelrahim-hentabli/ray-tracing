@@ -49,3 +49,5 @@ void Hierarchy::Intersection_Candidates(const Ray &ray,
     check_nodes.pop();
   }
 }
+
+void Hierarchy::Update() {}

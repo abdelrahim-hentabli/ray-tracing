@@ -148,3 +148,5 @@ Box Mesh::Bounding_Box(int part) const {
   b.Include_Point(vertices[triangles[part][2]]);
   return b;
 }
+
+void Mesh::Update(double deltaT) {}

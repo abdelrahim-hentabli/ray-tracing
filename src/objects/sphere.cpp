@@ -31,3 +31,5 @@ Box Sphere::Bounding_Box(int part) const {
   box.lo = center - radius_vector;
   return box;
 }
+
+void Sphere::Update(double deltaT) {}

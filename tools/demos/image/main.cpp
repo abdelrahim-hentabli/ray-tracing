@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
 
   // Parse commandline options
   while (1) {
-    int opt = getopt(argc, argv, "s:i:m:o:x:y:h");
+    int opt = getopt(argc, argv, "s:i:o:x:y:h");
     if (opt == -1) break;
     switch (opt) {
       case 's':

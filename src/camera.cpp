@@ -81,3 +81,8 @@ vec3 Camera::World_Position(const ivec2 &pixel_index) {
                        cellCenterScreenSpace[1] * vertical_vector);
   return result;
 }
+
+void Camera::Update(double deltaT) {
+  position += deltaT * velocity;
+  velocity += deltaT * acceleration;
+}
