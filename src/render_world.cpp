@@ -95,10 +95,13 @@ void Render_World::Clear_Hierarchy() {
   hierarchy.tree.clear();
 }
 
-void Render_World::Update(float deltaT) {
+void Render_World::Update(double deltaT) {
+  if (abs(deltaT) < std::numeric_limits<double>::epsilon()) {
+    return;
+  }
+  camera.Update(deltaT);
   for (Object *object: objects) {
     object->Update(deltaT);
   }
-  camera.Update(deltaT);
   hierarchy.Update();
 }

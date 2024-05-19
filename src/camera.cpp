@@ -82,6 +82,7 @@ vec3 Camera::World_Position(const ivec2 &pixel_index) {
   return result;
 }
 
-void Camera::Update(float deltaT) {
-
+void Camera::Update(double deltaT) {
+  position += deltaT * velocity;
+  velocity += deltaT * acceleration;
 }

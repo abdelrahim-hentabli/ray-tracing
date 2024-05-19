@@ -69,7 +69,7 @@ class Camera {
     int j = pixel_index[1];
     colors[j * number_pixels[0] + i] = color;
   }
-  void Update(float deltaT);
+  void Update(double deltaT);
 
 };
 #endif

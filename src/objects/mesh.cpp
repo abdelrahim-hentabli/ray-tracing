@@ -149,6 +149,6 @@ Box Mesh::Bounding_Box(int part) const {
   return b;
 }
 
-void Mesh::Update(float deltaT) {
+void Mesh::Update(double deltaT) {
 
 }

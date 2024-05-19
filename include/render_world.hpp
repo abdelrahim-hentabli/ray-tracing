@@ -43,6 +43,6 @@ class Render_World {
   vec3 Cast_Ray(const Ray &ray, int recursion_depth);
   Hit Closest_Intersection(const Ray &ray);
 
-  void Update(float deltaT);
+  void Update(double deltaT);
 };
 #endif

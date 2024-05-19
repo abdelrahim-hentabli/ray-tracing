@@ -29,6 +29,6 @@ Box Plane::Bounding_Box(int part) const {
   return b;
 }
 
-void Plane::Update(float deltaT) {
+void Plane::Update(double deltaT) {
 
 }
