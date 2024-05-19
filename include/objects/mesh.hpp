@@ -24,7 +24,6 @@ class Mesh : public Object {
   void Read_Obj(const char *file);
   Box Bounding_Box(int part) const override;
   void Update(double deltaT) override;
-
 };
 
 #endif

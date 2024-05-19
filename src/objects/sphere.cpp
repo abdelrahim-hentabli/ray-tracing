@@ -32,6 +32,4 @@ Box Sphere::Bounding_Box(int part) const {
   return box;
 }
 
-void Sphere::Update(double deltaT) {
-
-}
+void Sphere::Update(double deltaT) {}

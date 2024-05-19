@@ -10,9 +10,7 @@
 #include "parse.hpp"
 
 void Usage(const char *exec) {
-  std::cerr << "Usage: " << exec
-            << " -i <test-file>"
-            << std::endl;
+  std::cerr << "Usage: " << exec << " -i <test-file>" << std::endl;
   exit(1);
 }
 

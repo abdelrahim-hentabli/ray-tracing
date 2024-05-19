@@ -100,7 +100,7 @@ void Render_World::Update(double deltaT) {
     return;
   }
   camera.Update(deltaT);
-  for (Object *object: objects) {
+  for (Object *object : objects) {
     object->Update(deltaT);
   }
   hierarchy.Update();

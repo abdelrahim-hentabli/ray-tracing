@@ -55,7 +55,6 @@ class Object {
   // If part<0, return the bounding box for the whole object.
   virtual Box Bounding_Box(int part) const = 0;
   virtual void Update(double deltaT) = 0;
-
 };
 
 #endif

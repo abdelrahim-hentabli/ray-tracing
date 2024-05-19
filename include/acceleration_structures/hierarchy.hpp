@@ -50,6 +50,5 @@ class Hierarchy {
                                std::vector<int> &candidates) const;
 
   void Update();
-
 };
 #endif

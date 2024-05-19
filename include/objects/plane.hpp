@@ -18,7 +18,6 @@ class Plane : public Object {
   virtual vec3 Normal(const vec3 &point, int part) const override;
   virtual Box Bounding_Box(int part) const override;
   void Update(double deltaT) override;
-
 };
 
 #endif

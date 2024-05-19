@@ -50,6 +50,4 @@ void Hierarchy::Intersection_Candidates(const Ray &ray,
   }
 }
 
-void Hierarchy::Update() {
-
-}
+void Hierarchy::Update() {}
