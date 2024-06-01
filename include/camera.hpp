@@ -70,5 +70,6 @@ class Camera {
     colors[j * number_pixels[0] + i] = color;
   }
   void Update(double deltaT);
+  void Clear_Camera();
 };
 #endif

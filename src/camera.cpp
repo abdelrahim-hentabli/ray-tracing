@@ -86,3 +86,7 @@ void Camera::Update(double deltaT) {
   position += deltaT * velocity;
   velocity += deltaT * acceleration;
 }
+
+void Camera::Clear_Camera() {
+  colors = new Pixel[number_pixels[0] * number_pixels[1]];
+}

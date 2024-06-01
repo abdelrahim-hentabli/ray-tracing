@@ -539,7 +539,7 @@ static void close_stream(AVFormatContext *oc, OutputStream *ost) {
   swr_free(&ost->swr_ctx);
 }
 
-int Dump_mp4(Pixel *data, int width, int height, const char *filename) {
+int Dump_mp4(Pixel **data, int width, int height, const char *filename) {
   OutputStream video_st = {0}, audio_st = {0};
   const AVOutputFormat *fmt;
   AVFormatContext *oc;

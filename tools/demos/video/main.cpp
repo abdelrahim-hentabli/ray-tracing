@@ -16,11 +16,11 @@ void Usage(const char *exec) {
 
 int main(int argc, char **argv) {
   const char *input_file = 0;
-  Pixel *data = nullptr;
+  Pixel **data = nullptr;
 
   // Parse commandline options
   while (1) {
-    int opt = getopt(argc, argv, "s:i:m:o:x:y:h");
+    int opt = getopt(argc, argv, "i:");
     if (opt == -1) break;
     switch (opt) {
       case 'i':
@@ -39,7 +39,19 @@ int main(int argc, char **argv) {
   // Parse test scene file
   Parse(world, width, height, input_file);
 
+  constexpr int FPS       = 24;
+  constexpr int SECONDS   = 3;
+  constexpr double DELTA  = double (FPS) / double (SECONDS);
+
+  data = new Pixel*[(FPS * SECONDS) +1];
+
+  for (int i = 0; i <= FPS * SECONDS; i++) {
+    world.Render();
+    data[i] = world.camera.colors;
+    world.camera.Clear_Camera();
+    world.Update(DELTA);
+  }
   // Render the image
-  world.Render();
+
   Dump_mp4(data, width, height, "output.mp4");
 }
