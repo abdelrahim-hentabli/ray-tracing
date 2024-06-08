@@ -41,13 +41,23 @@ extern "C" {
   av_make_error_string((char *)__builtin_alloca(AV_ERROR_MAX_STRING_SIZE), \
                        AV_ERROR_MAX_STRING_SIZE, errnum)
 
-#define STREAM_DURATION 10.0
-#define STREAM_FRAME_RATE 25 /* 25 images/s */
-
 // a wrapper around a single output AVStream
 typedef struct OutputStream {
   AVStream *st;
   AVCodecContext *enc;
+
+  /* metadata*/
+  int64_t duration; // 10.0
+
+  /* Video metadata*/
+  int64_t video_bit_rate; // 8388608
+  int width;
+  int height;
+  AVRational framerate; // 25 / 1
+
+  /* Audio metadata*/
+  int64_t audio_bit_rate; // 64000
+  int sample_rate; // 44100
 
   /* pts of the next frame that will be generated */
   int64_t next_pts;
@@ -145,13 +155,13 @@ static void add_stream(OutputStream *ost, AVFormatContext *oc,
     case AVMEDIA_TYPE_AUDIO:
       c->sample_fmt =
           (*codec)->sample_fmts ? (*codec)->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
-      c->bit_rate = 64000;
-      c->sample_rate = 44100;
+      c->bit_rate = ost->audio_bit_rate;
+      c->sample_rate = ost->sample_rate;
       if ((*codec)->supported_samplerates) {
         c->sample_rate = (*codec)->supported_samplerates[0];
         for (i = 0; (*codec)->supported_samplerates[i]; i++) {
-          if ((*codec)->supported_samplerates[i] == 44100)
-            c->sample_rate = 44100;
+          if ((*codec)->supported_samplerates[i] == ost->sample_rate)
+            c->sample_rate = ost->sample_rate;
         }
       }
 
@@ -175,15 +185,15 @@ static void add_stream(OutputStream *ost, AVFormatContext *oc,
     case AVMEDIA_TYPE_VIDEO:
       c->codec_id = codec_id;
 
-      c->bit_rate = 8388608;
-      /* Resolution must be a multiple of two. */
-      c->width = 1440;
-      c->height = 1080;
+      c->bit_rate = ost->video_bit_rate;
+      /* Resolution must be a multiple of two (for yuv420 format). */
+      c->width = ost->width;
+      c->height = ost->height;
       /* timebase: This is the fundamental unit of time (in seconds) in terms
        * of which frame timestamps are represented. For fixed-fps content,
        * timebase should be 1/framerate and timestamp increments should be
        * identical to 1. */
-      ost->st->time_base = (AVRational){1, STREAM_FRAME_RATE};
+      ost->st->time_base = (AVRational){ost->framerate.den, ost->framerate.num};
       c->time_base = ost->st->time_base;
 
       c->gop_size = 12; /* emit one intra frame every twelve frames at most */
@@ -329,7 +339,7 @@ static AVFrame *get_audio_frame(OutputStream *ost) {
   int16_t *q = (int16_t *)frame->data[0];
 
   /* check if we want to generate more frames */
-  if (av_compare_ts(ost->next_pts, ost->enc->time_base, STREAM_DURATION,
+  if (av_compare_ts(ost->next_pts, ost->enc->time_base, ost->duration,
                     (AVRational){1, 1}) > 0)
     return NULL;
 
@@ -489,7 +499,7 @@ static AVFrame *get_video_frame(OutputStream *ost) {
   AVCodecContext *c = ost->enc;
 
   /* check if we want to generate more frames */
-  if (av_compare_ts(ost->next_pts, c->time_base, STREAM_DURATION,
+  if (av_compare_ts(ost->next_pts, c->time_base, ost->duration,
                     (AVRational){1, 1}) > 0)
     return NULL;
 
@@ -539,7 +549,7 @@ static void close_stream(AVFormatContext *oc, OutputStream *ost) {
   swr_free(&ost->swr_ctx);
 }
 
-int Dump_mp4(Pixel **data, int width, int height, const char *filename) {
+int Dump_mp4(const char *filename, Pixel **data, int width, int height, int frames, int framerate, int framerateDenominator) {
   OutputStream video_st = {0}, audio_st = {0};
   const AVOutputFormat *fmt;
   AVFormatContext *oc;
@@ -549,6 +559,26 @@ int Dump_mp4(Pixel **data, int width, int height, const char *filename) {
   int encode_video = 0, encode_audio = 0;
   AVDictionary *opt = NULL;
   int i;
+
+  /* Set up metadata */
+  uint64_t duration = (frames - 1) * framerateDenominator / framerate;
+  video_st.duration = duration;
+  audio_st.duration = duration;
+
+  /* Set up video stream metadata */
+  video_st.width    = width;
+  video_st.height   = height;
+  video_st.framerate = AVRational{framerate, framerateDenominator};
+
+  int pixelPerFrame = width * height;
+  double bitsPerFrame = pixelPerFrame * .3125; // (.3125 bits per pixel for mp4 )
+  double bitsPerSecond = bitsPerFrame * framerate / framerateDenominator;
+
+  video_st.video_bit_rate = bitsPerSecond;
+
+  /* Set up audio stream metadata */
+  audio_st.audio_bit_rate = 64000;
+  audio_st.sample_rate    = 44100;
 
   /* allocate the output media context */
   avformat_alloc_output_context2(&oc, NULL, NULL, filename);
