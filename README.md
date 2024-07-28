@@ -4,7 +4,7 @@ A raytracing project created for the purpose of learning
 
 ## Downloading and Building the Project
 
-This project can be downloaded by using the 
+This project can be downloaded by using the
 ```
 git clone --recurse-submodules https://github.com/abdelrahim-hentabli/ray-tracing.git
 ```
@@ -14,7 +14,7 @@ git clone --recurse-submodules git@github.com:abdelrahim-hentabli/ray-tracing.gi
 ```
 
 
-The library/executables can be built by calling (from within the project directory): 
+The library/executables can be built by calling (from within the project directory):
 ```
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
@@ -32,3 +32,10 @@ And benchmarks can be run by calling
 ```
 ./build/tools/benchmark/benchmarks
 ```
+
+## Current Progress
+
+Currently, there is a working ray-tracer for both images and videos, which can be seen when running the executables generated from the `tools/demos/` folder:
+
+[![Ray-Traced Cow](https://raw.githubusercontent.com/abdelrahim-hentabli/ray-tracer/main/imgs/output.png)](https://raw.githubusercontent.com/abdelrahim-hentabli/ray-tracer/main/imgs/output.mp4)
+
