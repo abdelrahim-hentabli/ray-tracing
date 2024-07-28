@@ -37,5 +37,5 @@ And benchmarks can be run by calling
 
 Currently, there is a working ray-tracer for both images and videos, which can be seen when running the executables generated from the `tools/demos/` folder:
 
-[![Ray-Traced Cow](https://raw.githubusercontent.com/abdelrahim-hentabli/ray-tracer/main/imgs/output.png)](https://raw.githubusercontent.com/abdelrahim-hentabli/ray-tracer/main/imgs/output.mp4)
+https://github.com/user-attachments/assets/b297539f-450d-4c47-b5ec-f3b63f5a1a91
 
