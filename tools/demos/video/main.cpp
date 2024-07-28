@@ -43,15 +43,14 @@ int main(int argc, char **argv) {
   constexpr int SECONDS   = 3;
   constexpr double DELTA  = double (FPS) / double (SECONDS);
 
-  // data = new Pixel*[(FPS * SECONDS) +1];
+  data = new Pixel*[(FPS * SECONDS) +1];
 
-  // for (int i = 0; i <= FPS * SECONDS; i++) {
-  //   world.Render();
-  //   data[i] = world.camera.colors;
-  //   world.camera.Clear_Camera();
-  //   world.Update(DELTA);
-  // }
-  // Render the image
+  for (int i = 0; i <= FPS * SECONDS; i++) {
+    world.Render();
+    data[i] = world.camera.colors;
+    world.camera.Clear_Camera();
+    world.Update(DELTA);
+  }
 
   Dump_mp4("output.mp4", data, width, height, SECONDS * FPS + 1, FPS, 1);
 }

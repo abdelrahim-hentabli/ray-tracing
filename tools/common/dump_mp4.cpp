@@ -476,26 +476,48 @@ static void open_video(AVFormatContext *oc, const AVCodec *codec,
 
 /* Prepare a dummy image. */
 static void fill_yuv_image(AVFrame *pict, int frame_index, int width,
-                           int height) {
+                           int height, Pixel** data) {
   int x, y, i;
 
   i = frame_index;
+  Pixel* frame = data[i];
 
   /* Y */
-  for (y = 0; y < height; y++)
-    for (x = 0; x < width; x++)
-      pict->data[0][y * pict->linesize[0] + x] = x + y + i * 3;
+  for (y = 0; y < height; y++){
+    for (x = 0; x < width; x++){
+      const Pixel   p = frame[width * (height - y - 1) + x];
+      const uint8_t r = R(p);
+      const uint8_t g = G(p);
+      const uint8_t b = B(p);
+      pict->data[0][y * pict->linesize[0] + x] = 16 + (((r << 6) + (r << 1) + (g << 7) + g + (b << 4) + (b << 3) + b) >> 8) ;
+    }
+  }
 
   /* Cb and Cr */
   for (y = 0; y < height / 2; y++) {
     for (x = 0; x < width / 2; x++) {
-      pict->data[1][y * pict->linesize[1] + x] = 128 + y + i * 2;
-      pict->data[2][y * pict->linesize[2] + x] = 64 + x + i * 5;
+
+      const Pixel p1 = frame[width * (height - (y*2) - 1) + (x*2)]; const uint8_t r1 = R(p1); const uint8_t g1 = G(p1); const uint8_t b1 = B(p1);
+      const Pixel p2 = frame[width * (height - (y*2) - 1) + (x*2+1)]; const uint8_t r2 = R(p2); const uint8_t g2 = G(p2); const uint8_t b2 = B(p2);
+      const Pixel p3 = frame[width * (height - (y*2+1) - 1) + (x*2)]; const uint8_t r3 = R(p3); const uint8_t g3 = G(p3); const uint8_t b3 = B(p3);
+      const Pixel p4 = frame[width * (height - (y*2+1) - 1) + (x*2+1)]; const uint8_t r4 = R(p4); const uint8_t g4 = G(p4); const uint8_t b4 = B(p4);
+
+      const uint8_t cb = ((128 + ((-((r1 << 5 ) + (r1 << 2) + (r1 << 1)) - ((g1 << 6) + (g1 << 3) + (g1 << 1)) + (b1 << 7) - (b1 << 4)) >> 8)) +
+                          (128 + ((-((r2 << 5 ) + (r2 << 2) + (r2 << 1)) - ((g2 << 6) + (g2 << 3) + (g2 << 1)) + (b2 << 7) - (b2 << 4)) >> 8)) +
+                          (128 + ((-((r3 << 5 ) + (r3 << 2) + (r3 << 1)) - ((g3 << 6) + (g3 << 3) + (g3 << 1)) + (b3 << 7) - (b3 << 4)) >> 8)) +
+                          (128 + ((-((r4 << 5 ) + (r4 << 2) + (r4 << 1)) - ((g4 << 6) + (g4 << 3) + (g4 << 1)) + (b4 << 7) - (b4 << 4)) >> 8))) / 4;
+      const uint8_t cr = ((128 + (((r1 << 7) - (r1 << 4) - ((g1 << 6) + (g1 << 5) - (g1 << 1)) - ((b1 << 4) + (b1 << 1))) >> 8)) +
+                          (128 + (((r2 << 7) - (r2 << 4) - ((g2 << 6) + (g2 << 5) - (g2 << 1)) - ((b2 << 4) + (b2 << 1))) >> 8)) +
+                          (128 + (((r3 << 7) - (r3 << 4) - ((g3 << 6) + (g3 << 5) - (g3 << 1)) - ((b3 << 4) + (b3 << 1))) >> 8)) +
+                          (128 + (((r4 << 7) - (r4 << 4) - ((g4 << 6) + (g4 << 5) - (g4 << 1)) - ((b4 << 4) + (b4 << 1))) >> 8))) / 4;
+
+      pict->data[1][y * pict->linesize[1] + x] = cb;
+      pict->data[2][y * pict->linesize[2] + x] = cr;
     }
   }
 }
 
-static AVFrame *get_video_frame(OutputStream *ost) {
+static AVFrame *get_video_frame(OutputStream *ost, Pixel** data) {
   AVCodecContext *c = ost->enc;
 
   /* check if we want to generate more frames */
@@ -519,12 +541,12 @@ static AVFrame *get_video_frame(OutputStream *ost) {
         exit(1);
       }
     }
-    fill_yuv_image(ost->tmp_frame, ost->next_pts, c->width, c->height);
+    fill_yuv_image(ost->tmp_frame, ost->next_pts, c->width, c->height, data);
     sws_scale(ost->sws_ctx, (const uint8_t *const *)ost->tmp_frame->data,
               ost->tmp_frame->linesize, 0, c->height, ost->frame->data,
               ost->frame->linesize);
   } else {
-    fill_yuv_image(ost->frame, ost->next_pts, c->width, c->height);
+    fill_yuv_image(ost->frame, ost->next_pts, c->width, c->height, data);
   }
 
   ost->frame->pts = ost->next_pts++;
@@ -536,8 +558,8 @@ static AVFrame *get_video_frame(OutputStream *ost) {
  * encode one video frame and send it to the muxer
  * return 1 when encoding is finished, 0 otherwise
  */
-static int write_video_frame(AVFormatContext *oc, OutputStream *ost) {
-  return write_frame(oc, ost->enc, ost->st, get_video_frame(ost), ost->tmp_pkt);
+static int write_video_frame(AVFormatContext *oc, OutputStream *ost, Pixel** data) {
+  return write_frame(oc, ost->enc, ost->st, get_video_frame(ost, data), ost->tmp_pkt);
 }
 
 static void close_stream(AVFormatContext *oc, OutputStream *ost) {
@@ -630,7 +652,7 @@ int Dump_mp4(const char *filename, Pixel **data, int width, int height, int fram
         (!encode_audio ||
          av_compare_ts(video_st.next_pts, video_st.enc->time_base,
                        audio_st.next_pts, audio_st.enc->time_base) <= 0)) {
-      encode_video = !write_video_frame(oc, &video_st);
+      encode_video = !write_video_frame(oc, &video_st, data);
     } else {
       encode_audio = !write_audio_frame(oc, &audio_st);
     }
