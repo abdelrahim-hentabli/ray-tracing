@@ -39,11 +39,11 @@ int main(int argc, char **argv) {
   // Parse test scene file
   Parse(world, width, height, input_file);
 
-  constexpr int FPS       = 24;
-  constexpr int SECONDS   = 3;
-  constexpr double DELTA  = double (FPS) / double (SECONDS);
+  constexpr int FPS = 24;
+  constexpr int SECONDS = 3;
+  constexpr double DELTA = double(FPS) / double(SECONDS);
 
-  data = new Pixel*[(FPS * SECONDS) +1];
+  data = new Pixel *[(FPS * SECONDS) + 1];
 
   for (int i = 0; i <= FPS * SECONDS; i++) {
     world.Render();
