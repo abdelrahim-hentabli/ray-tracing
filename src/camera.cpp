@@ -58,10 +58,15 @@ void Camera::Position_And_Aim_Camera(const vec3 &position_input,
 
 void Camera::Focus_Camera(double focal_distance, double aspect_ratio,
                           double field_of_view) {
+  focal_distance_ = focal_distance;
   film_position = position + look_vector * focal_distance;
   double width = 2.0 * focal_distance * tan(.5 * field_of_view);
   double height = width / aspect_ratio;
   image_size = vec2(width, height);
+}
+
+void Camera::Set_Film_Position() {
+  film_position = position + look_vector * focal_distance_;
 }
 
 void Camera::Set_Resolution(const ivec2 &number_pixels_input) {
@@ -84,5 +89,10 @@ vec3 Camera::World_Position(const ivec2 &pixel_index) {
 
 void Camera::Update(double deltaT) {
   position += deltaT * velocity;
+  Set_Film_Position();
   velocity += deltaT * acceleration;
+}
+
+void Camera::Clear_Camera() {
+  colors = new Pixel[number_pixels[0] * number_pixels[1]];
 }

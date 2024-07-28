@@ -44,6 +44,8 @@ class Camera {
   vec3 velocity;
   vec3 acceleration;
 
+  double focal_distance_;
+
   Camera();
   ~Camera();
   Camera(const Camera &other);
@@ -55,6 +57,8 @@ class Camera {
                                const vec3 &pseudo_up_vector);
   void Focus_Camera(double focal_distance, double aspect_ratio,
                     double field_of_view);
+
+  void Set_Film_Position();
   void Set_Resolution(const ivec2 &number_pixels_input);
 
   // Used for determining the where pixels are
@@ -70,5 +74,6 @@ class Camera {
     colors[j * number_pixels[0] + i] = color;
   }
   void Update(double deltaT);
+  void Clear_Camera();
 };
 #endif

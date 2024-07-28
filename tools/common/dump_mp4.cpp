@@ -41,13 +41,23 @@ extern "C" {
   av_make_error_string((char *)__builtin_alloca(AV_ERROR_MAX_STRING_SIZE), \
                        AV_ERROR_MAX_STRING_SIZE, errnum)
 
-#define STREAM_DURATION 10.0
-#define STREAM_FRAME_RATE 25 /* 25 images/s */
-
 // a wrapper around a single output AVStream
 typedef struct OutputStream {
   AVStream *st;
   AVCodecContext *enc;
+
+  /* metadata*/
+  int64_t duration;  // 10.0
+
+  /* Video metadata*/
+  int64_t video_bit_rate;  // 8388608
+  int width;
+  int height;
+  AVRational framerate;  // 25 / 1
+
+  /* Audio metadata*/
+  int64_t audio_bit_rate;  // 64000
+  int sample_rate;         // 44100
 
   /* pts of the next frame that will be generated */
   int64_t next_pts;
@@ -145,13 +155,13 @@ static void add_stream(OutputStream *ost, AVFormatContext *oc,
     case AVMEDIA_TYPE_AUDIO:
       c->sample_fmt =
           (*codec)->sample_fmts ? (*codec)->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
-      c->bit_rate = 64000;
-      c->sample_rate = 44100;
+      c->bit_rate = ost->audio_bit_rate;
+      c->sample_rate = ost->sample_rate;
       if ((*codec)->supported_samplerates) {
         c->sample_rate = (*codec)->supported_samplerates[0];
         for (i = 0; (*codec)->supported_samplerates[i]; i++) {
-          if ((*codec)->supported_samplerates[i] == 44100)
-            c->sample_rate = 44100;
+          if ((*codec)->supported_samplerates[i] == ost->sample_rate)
+            c->sample_rate = ost->sample_rate;
         }
       }
 
@@ -175,15 +185,15 @@ static void add_stream(OutputStream *ost, AVFormatContext *oc,
     case AVMEDIA_TYPE_VIDEO:
       c->codec_id = codec_id;
 
-      c->bit_rate = 8388608;
-      /* Resolution must be a multiple of two. */
-      c->width = 1440;
-      c->height = 1080;
+      c->bit_rate = ost->video_bit_rate;
+      /* Resolution must be a multiple of two (for yuv420 format). */
+      c->width = ost->width;
+      c->height = ost->height;
       /* timebase: This is the fundamental unit of time (in seconds) in terms
        * of which frame timestamps are represented. For fixed-fps content,
        * timebase should be 1/framerate and timestamp increments should be
        * identical to 1. */
-      ost->st->time_base = (AVRational){1, STREAM_FRAME_RATE};
+      ost->st->time_base = (AVRational){ost->framerate.den, ost->framerate.num};
       c->time_base = ost->st->time_base;
 
       c->gop_size = 12; /* emit one intra frame every twelve frames at most */
@@ -329,7 +339,7 @@ static AVFrame *get_audio_frame(OutputStream *ost) {
   int16_t *q = (int16_t *)frame->data[0];
 
   /* check if we want to generate more frames */
-  if (av_compare_ts(ost->next_pts, ost->enc->time_base, STREAM_DURATION,
+  if (av_compare_ts(ost->next_pts, ost->enc->time_base, ost->duration,
                     (AVRational){1, 1}) > 0)
     return NULL;
 
@@ -466,30 +476,93 @@ static void open_video(AVFormatContext *oc, const AVCodec *codec,
 
 /* Prepare a dummy image. */
 static void fill_yuv_image(AVFrame *pict, int frame_index, int width,
-                           int height) {
+                           int height, Pixel **data) {
   int x, y, i;
 
   i = frame_index;
+  Pixel *frame = data[i];
 
   /* Y */
-  for (y = 0; y < height; y++)
-    for (x = 0; x < width; x++)
-      pict->data[0][y * pict->linesize[0] + x] = x + y + i * 3;
+  for (y = 0; y < height; y++) {
+    for (x = 0; x < width; x++) {
+      const Pixel p = frame[width * (height - y - 1) + x];
+      const uint8_t r = R(p);
+      const uint8_t g = G(p);
+      const uint8_t b = B(p);
+      pict->data[0][y * pict->linesize[0] + x] =
+          16 +
+          (((r << 6) + (r << 1) + (g << 7) + g + (b << 4) + (b << 3) + b) >> 8);
+    }
+  }
 
   /* Cb and Cr */
   for (y = 0; y < height / 2; y++) {
     for (x = 0; x < width / 2; x++) {
-      pict->data[1][y * pict->linesize[1] + x] = 128 + y + i * 2;
-      pict->data[2][y * pict->linesize[2] + x] = 64 + x + i * 5;
+      const Pixel p1 = frame[width * (height - (y * 2) - 1) + (x * 2)];
+      const uint8_t r1 = R(p1);
+      const uint8_t g1 = G(p1);
+      const uint8_t b1 = B(p1);
+      const Pixel p2 = frame[width * (height - (y * 2) - 1) + (x * 2 + 1)];
+      const uint8_t r2 = R(p2);
+      const uint8_t g2 = G(p2);
+      const uint8_t b2 = B(p2);
+      const Pixel p3 = frame[width * (height - (y * 2 + 1) - 1) + (x * 2)];
+      const uint8_t r3 = R(p3);
+      const uint8_t g3 = G(p3);
+      const uint8_t b3 = B(p3);
+      const Pixel p4 = frame[width * (height - (y * 2 + 1) - 1) + (x * 2 + 1)];
+      const uint8_t r4 = R(p4);
+      const uint8_t g4 = G(p4);
+      const uint8_t b4 = B(p4);
+
+      const uint8_t cb =
+          ((128 +
+            ((-((r1 << 5) + (r1 << 2) + (r1 << 1)) -
+              ((g1 << 6) + (g1 << 3) + (g1 << 1)) + (b1 << 7) - (b1 << 4)) >>
+             8)) +
+           (128 +
+            ((-((r2 << 5) + (r2 << 2) + (r2 << 1)) -
+              ((g2 << 6) + (g2 << 3) + (g2 << 1)) + (b2 << 7) - (b2 << 4)) >>
+             8)) +
+           (128 +
+            ((-((r3 << 5) + (r3 << 2) + (r3 << 1)) -
+              ((g3 << 6) + (g3 << 3) + (g3 << 1)) + (b3 << 7) - (b3 << 4)) >>
+             8)) +
+           (128 +
+            ((-((r4 << 5) + (r4 << 2) + (r4 << 1)) -
+              ((g4 << 6) + (g4 << 3) + (g4 << 1)) + (b4 << 7) - (b4 << 4)) >>
+             8))) /
+          4;
+      const uint8_t cr =
+          ((128 +
+            (((r1 << 7) - (r1 << 4) - ((g1 << 6) + (g1 << 5) - (g1 << 1)) -
+              ((b1 << 4) + (b1 << 1))) >>
+             8)) +
+           (128 +
+            (((r2 << 7) - (r2 << 4) - ((g2 << 6) + (g2 << 5) - (g2 << 1)) -
+              ((b2 << 4) + (b2 << 1))) >>
+             8)) +
+           (128 +
+            (((r3 << 7) - (r3 << 4) - ((g3 << 6) + (g3 << 5) - (g3 << 1)) -
+              ((b3 << 4) + (b3 << 1))) >>
+             8)) +
+           (128 +
+            (((r4 << 7) - (r4 << 4) - ((g4 << 6) + (g4 << 5) - (g4 << 1)) -
+              ((b4 << 4) + (b4 << 1))) >>
+             8))) /
+          4;
+
+      pict->data[1][y * pict->linesize[1] + x] = cb;
+      pict->data[2][y * pict->linesize[2] + x] = cr;
     }
   }
 }
 
-static AVFrame *get_video_frame(OutputStream *ost) {
+static AVFrame *get_video_frame(OutputStream *ost, Pixel **data) {
   AVCodecContext *c = ost->enc;
 
   /* check if we want to generate more frames */
-  if (av_compare_ts(ost->next_pts, c->time_base, STREAM_DURATION,
+  if (av_compare_ts(ost->next_pts, c->time_base, ost->duration,
                     (AVRational){1, 1}) > 0)
     return NULL;
 
@@ -509,12 +582,12 @@ static AVFrame *get_video_frame(OutputStream *ost) {
         exit(1);
       }
     }
-    fill_yuv_image(ost->tmp_frame, ost->next_pts, c->width, c->height);
+    fill_yuv_image(ost->tmp_frame, ost->next_pts, c->width, c->height, data);
     sws_scale(ost->sws_ctx, (const uint8_t *const *)ost->tmp_frame->data,
               ost->tmp_frame->linesize, 0, c->height, ost->frame->data,
               ost->frame->linesize);
   } else {
-    fill_yuv_image(ost->frame, ost->next_pts, c->width, c->height);
+    fill_yuv_image(ost->frame, ost->next_pts, c->width, c->height, data);
   }
 
   ost->frame->pts = ost->next_pts++;
@@ -526,8 +599,10 @@ static AVFrame *get_video_frame(OutputStream *ost) {
  * encode one video frame and send it to the muxer
  * return 1 when encoding is finished, 0 otherwise
  */
-static int write_video_frame(AVFormatContext *oc, OutputStream *ost) {
-  return write_frame(oc, ost->enc, ost->st, get_video_frame(ost), ost->tmp_pkt);
+static int write_video_frame(AVFormatContext *oc, OutputStream *ost,
+                             Pixel **data) {
+  return write_frame(oc, ost->enc, ost->st, get_video_frame(ost, data),
+                     ost->tmp_pkt);
 }
 
 static void close_stream(AVFormatContext *oc, OutputStream *ost) {
@@ -539,7 +614,8 @@ static void close_stream(AVFormatContext *oc, OutputStream *ost) {
   swr_free(&ost->swr_ctx);
 }
 
-int Dump_mp4(Pixel *data, int width, int height, const char *filename) {
+int Dump_mp4(const char *filename, Pixel **data, int width, int height,
+             int frames, int framerate, int framerateDenominator) {
   OutputStream video_st = {0}, audio_st = {0};
   const AVOutputFormat *fmt;
   AVFormatContext *oc;
@@ -549,6 +625,27 @@ int Dump_mp4(Pixel *data, int width, int height, const char *filename) {
   int encode_video = 0, encode_audio = 0;
   AVDictionary *opt = NULL;
   int i;
+
+  /* Set up metadata */
+  uint64_t duration = (frames - 1) * framerateDenominator / framerate;
+  video_st.duration = duration;
+  audio_st.duration = duration;
+
+  /* Set up video stream metadata */
+  video_st.width = width;
+  video_st.height = height;
+  video_st.framerate = AVRational{framerate, framerateDenominator};
+
+  int pixelPerFrame = width * height;
+  double bitsPerFrame =
+      pixelPerFrame * .3125;  // (.3125 bits per pixel for mp4 )
+  double bitsPerSecond = bitsPerFrame * framerate / framerateDenominator;
+
+  video_st.video_bit_rate = bitsPerSecond;
+
+  /* Set up audio stream metadata */
+  audio_st.audio_bit_rate = 64000;
+  audio_st.sample_rate = 44100;
 
   /* allocate the output media context */
   avformat_alloc_output_context2(&oc, NULL, NULL, filename);
@@ -600,7 +697,7 @@ int Dump_mp4(Pixel *data, int width, int height, const char *filename) {
         (!encode_audio ||
          av_compare_ts(video_st.next_pts, video_st.enc->time_base,
                        audio_st.next_pts, audio_st.enc->time_base) <= 0)) {
-      encode_video = !write_video_frame(oc, &video_st);
+      encode_video = !write_video_frame(oc, &video_st, data);
     } else {
       encode_audio = !write_audio_frame(oc, &audio_st);
     }
