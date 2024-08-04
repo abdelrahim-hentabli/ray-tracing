@@ -61,3 +61,8 @@ void Box::Make_Empty() {
   lo.fill(std::numeric_limits<double>::infinity());
   hi = -lo;
 }
+
+// Get the size of the box
+vec3 Box::Get_Size() { return hi - lo; }
+
+vec3 Box::Get_Center() { return .5 * (hi + lo); }
