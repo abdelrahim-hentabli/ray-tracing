@@ -54,7 +54,7 @@ static void BM_setupHierarchy(benchmark::State &state) {
   }
 }
 
-BENCHMARK(BM_setupHierarchy);
+BENCHMARK(BM_setupHierarchy)->Unit(benchmark::kMillisecond);
 
 class IntersectionCandidatesFixture : public benchmark::Fixture {
  public:
@@ -136,6 +136,7 @@ BENCHMARK_DEFINE_F(IntersectionCandidatesFixture, NominalDirections)
 
 BENCHMARK_REGISTER_F(IntersectionCandidatesFixture, NominalDirections)
     ->Name("IntersectionCandidatesByDirection")
-    ->DenseRange(0, 5, 1);
+    ->DenseRange(0, 5, 1)
+    ->Unit(benchmark::kMillisecond);
 
 #endif  // __BENCHMARK_HIERARCHY_HPP__
