@@ -22,5 +22,9 @@ class Box {
 
   // Create a box to which points can be correctly added using Include_Point.
   void Make_Empty();
+
+  vec3 Get_Size();
+
+  vec3 Get_Center();
 };
 #endif

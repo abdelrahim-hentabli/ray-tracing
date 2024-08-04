@@ -9,9 +9,45 @@
 void Hierarchy::Reorder_Entries() {
   if (!entries.size()) return;
   // sort based on bounding box lo, kinda stupid. But a start
-  std::sort(entries.begin(), entries.end(), [](Entry first, Entry second) {
-    return first.box.lo[1] < second.box.lo[1];
-  });
+  vec3 sum;
+  for (Entry entry : entries) {
+    sum += entry.box.Get_Center();
+  }
+
+  vec3 mean = sum / entries.size();
+
+  int furthest_index = 0;
+  double distance_squared_to_center =
+      (mean - entries[0].box.Get_Center()).magnitude_squared();
+  for (int i = 1; i < entries.size(); i++) {
+    if ((mean - entries[i].box.Get_Center()).magnitude_squared() >
+        distance_squared_to_center) {
+      furthest_index = i;
+      distance_squared_to_center =
+          (mean - entries[i].box.Get_Center()).magnitude_squared();
+    }
+  }
+
+  std::swap(entries[0], entries[furthest_index]);
+
+  int nearest_index;
+  double nearest_distance;
+  for (int i = 1; i < entries.size() - 2; i++) {
+    nearest_index = i + 1;
+    nearest_distance =
+        (entries[i].box.Get_Center() - entries[nearest_index].box.Get_Center())
+            .magnitude_squared();
+    for (int j = i + 2; j < entries.size(); j++) {
+      if ((entries[i].box.Get_Center() - entries[j].box.Get_Center())
+              .magnitude_squared() < nearest_distance) {
+        nearest_index = j;
+        nearest_distance =
+            (entries[i].box.Get_Center() - entries[j].box.Get_Center())
+                .magnitude_squared();
+      }
+    }
+    std::swap(entries[i], entries[nearest_index]);
+  }
 }
 
 // Populate tree from entries.
