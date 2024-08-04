@@ -8,7 +8,7 @@
 // You may want to implement box.cpp first.
 void Hierarchy::Reorder_Entries() {
   if (!entries.size()) return;
-  // sort based on bounding box lo, kinda stupid. But a start
+
   vec3 sum;
   for (Entry entry : entries) {
     sum += entry.box.Get_Center();
@@ -32,7 +32,7 @@ void Hierarchy::Reorder_Entries() {
 
   int nearest_index;
   double nearest_distance;
-  for (int i = 1; i < entries.size() - 2; i++) {
+  for (int i = 0; i < (int)entries.size() - 2; i++) {
     nearest_index = i + 1;
     nearest_distance =
         (entries[i].box.Get_Center() - entries[nearest_index].box.Get_Center())
@@ -46,7 +46,7 @@ void Hierarchy::Reorder_Entries() {
                 .magnitude_squared();
       }
     }
-    std::swap(entries[i], entries[nearest_index]);
+    std::swap(entries[i + 1], entries[nearest_index]);
   }
 }
 
