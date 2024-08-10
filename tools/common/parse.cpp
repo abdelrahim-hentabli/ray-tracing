@@ -13,6 +13,7 @@
 #include "shaders/flat_shader.hpp"
 #include "shaders/phong_shader.hpp"
 #include "shaders/reflective_shader.hpp"
+#include "shaders/refractive_shader.hpp"
 
 void Parse(Render_World &world, int &width, int &height,
            const char *test_file) {
@@ -22,7 +23,7 @@ void Parse(Render_World &world, int &width, int &height,
     exit(EXIT_FAILURE);
   }
 
-  double f0;
+  double f0, ior, ci;
   char buff[1000];
   vec3 u, v, w;
   vec3 velocity, acceleration;
@@ -100,6 +101,12 @@ void Parse(Render_World &world, int &width, int &height,
       std::map<std::string, Shader *>::const_iterator sh = shaders.find(s0);
       assert(sh != shaders.end());
       shaders[name] = new Reflective_Shader(world, sh->second, f0);
+    } else if (item == "refractive_shader") {
+      ss >> name >> s0 >> ior >> ci;
+      assert(ss);
+      std::map<std::string, Shader *>::const_iterator sh = shaders.find(s0);
+      assert(sh != shaders.end());
+      shaders[name] = new Refractive_Shader(world, sh->second, ior, ci);
     } else if (item == "point_light") {
       ss >> u >> s0 >> f0;
       assert(ss);
