@@ -21,5 +21,10 @@ class Refractive_Shader : public Shader {
   virtual vec3 Shade_Surface(const Ray &ray, const vec3 &intersection_point,
                              const vec3 &normal,
                              int recursion_depth) const override;
+
+private:
+  void fresnel(const vec3 &direction, const vec3 &normal, double &kr) const;
+  vec3 reflect(const vec3 &direction, const vec3 &normal) const;
+  vec3 refract(const vec3 &direction, const vec3 &normal) const;
 };
 #endif

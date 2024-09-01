@@ -9,10 +9,10 @@ phong_shader blue_shader blue blue white 50
 phong_shader green_shader green green white 50
 phong_shader white_shader white white white 50
 phong_shader gray_shader gray gray white 50
-refractive_shader refractr red_shader 1.33 .8
-refractive_shader refractb blue_shader 1.33 .8
-refractive_shader refractg green_shader 1.33 .8
-refractive_shader refractw white_shader 1.33 .8
+refractive_shader refractr red_shader 1.33 .1
+refractive_shader refractb blue_shader 1.33 .1
+refractive_shader refractg green_shader 1.33 .1
+refractive_shader refractw white_shader 1.33 .1
 plane - 0 -1 0 0 1 0 gray_shader
 sphere - 0 0 0 .5 refractw
 sphere - 1 0 0 .5 refractr
