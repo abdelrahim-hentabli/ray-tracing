@@ -10,7 +10,7 @@ vec3 Reflective_Shader::Shade_Surface(const Ray &ray,
   vec3 color =
       (1 - reflectivity) *
       shader->Shade_Surface(ray, intersection_point, normal, recursion_depth);
-  ;
+
   if (recursion_depth >= world.recursion_depth_limit) {
     return color;
   }
