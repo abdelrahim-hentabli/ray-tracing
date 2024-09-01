@@ -11,8 +11,8 @@ class Refractive_Shader : public Shader {
   double incidence_of_refraction;
   double color_intensity;
 
-  Refractive_Shader(Render_World &world_input, Shader *shader_input,
-                    double ior, double ci)
+  Refractive_Shader(Render_World &world_input, Shader *shader_input, double ior,
+                    double ci)
       : Shader(world_input),
         shader(shader_input),
         incidence_of_refraction(ior),
@@ -22,7 +22,7 @@ class Refractive_Shader : public Shader {
                              const vec3 &normal,
                              int recursion_depth) const override;
 
-private:
+ private:
   void fresnel(const vec3 &direction, const vec3 &normal, double &kr) const;
   vec3 reflect(const vec3 &direction, const vec3 &normal) const;
   vec3 refract(const vec3 &direction, const vec3 &normal) const;
