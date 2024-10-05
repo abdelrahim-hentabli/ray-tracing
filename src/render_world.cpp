@@ -52,8 +52,8 @@ void Render_World::Render() {
     Initialize_Hierarchy();
   }
   Ray ray;
-  for (int j = 0; j < camera.number_pixels[1]; j++) {
 #pragma omp parallel for num_threads(8) shared(camera) private(ray)
+  for (int j = 0; j < camera.number_pixels[1]; j++) {
     for (int i = 0; i < camera.number_pixels[0]; i++) {
       ray = Ray(camera.position,
                 camera.World_Position(ivec2(i, j)) - camera.position);
