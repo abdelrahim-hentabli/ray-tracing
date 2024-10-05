@@ -139,4 +139,29 @@ BENCHMARK_REGISTER_F(IntersectionCandidatesFixture, NominalDirections)
     ->DenseRange(0, 5, 1)
     ->Unit(benchmark::kMillisecond);
 
+static void BM_drawWHierarchy(benchmark::State &state) {
+  int width = 0;
+  int height = 0;
+  Render_World world = std::move(SetupBenchmarkWorld(
+      640, 480, vec3(0, 0, 1), vec3(0, 0, 0), vec3(0, 1, 0)));
+  world.Initialize_Hierarchy();
+  for (auto _ : state) {
+    world.Render();
+  }
+}
+
+BENCHMARK(BM_drawWHierarchy)->Unit(benchmark::kMillisecond);
+
+static void BM_drawWOHierarchy(benchmark::State &state) {
+  int width = 0;
+  int height = 0;
+  Render_World world = std::move(SetupBenchmarkWorld(
+      640, 480, vec3(0, 0, 1), vec3(0, 0, 0), vec3(0, 1, 0)));
+  for (auto _ : state) {
+    world.Render();
+  }
+}
+
+BENCHMARK(BM_drawWOHierarchy)->Unit(benchmark::kMillisecond);
+
 #endif  // __BENCHMARK_HIERARCHY_HPP__
