@@ -1,23 +1,35 @@
 name: pre-commit
 
 on:
-  pull_request:
-
+  issue_comment:
+    types: [created]
 jobs:
-  Build-And-test:
-    runs-on: ubuntu-latest
+  command-check: ubuntu-latest
+  test_matrix:
+    if: ${{ github.event.issue.pull_request && contains( github.event.comment.body, '/pcm' ) }}
+    stategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-20.04]
+        build_type: [default, openmp]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: 'true'
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: libavutil58 libavcodec-dev libavformat-dev libswscale-dev libswresample-dev
+          packages: libpng-dev libavutil58 libavcodec-dev libavformat-dev libswscale-dev libswresample-dev
           version: 1.2
           execute_install_scripts: true
-      - name: CMake config & build
+      - name: Default CMake config & build
+        if: ${{ matrix.build_type == 'default' }}
         run:  |
           cmake -B build -DCMAKE_BUILD_TYPE=Release .
+          cmake --build build --parallel 4
+      - name: OpenMP CMake config & build
+        if: ${{ matrix.build_type == 'openmp' }}
+        run:  |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_OMP=ON .
           cmake --build build --parallel 4
       - name: Run test
         run: ./build/tools/test/tests
