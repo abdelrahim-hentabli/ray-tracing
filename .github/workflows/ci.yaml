@@ -5,8 +5,8 @@ on:
     branches:
      - main
 jobs:
-  test-matrix:
-    stategy:
+  test_matrix:
+    strategy:
       matrix:
         os: [ubuntu-22.04, ubuntu-20.04]
         build_type: [default, openmp]

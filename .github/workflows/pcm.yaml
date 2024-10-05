@@ -5,8 +5,8 @@ on:
     types: [created, edited, deleted]
 jobs:
   test_matrix:
-    if: ${{ github.event.issue.pull_request && contains( github.event.comment.body, '\pcm' ) }}
-    stategy:
+    if: ${{ github.event.issue.pull_request && contains( github.event.comment.body, '/pcm' ) }}
+    strategy:
       matrix:
         os: [ubuntu-22.04, ubuntu-20.04]
         build_type: [default, openmp]
