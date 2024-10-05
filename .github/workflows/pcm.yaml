@@ -2,7 +2,7 @@ name: pre-commit
 
 on:
   issue_comment:
-    types: [created]
+    types: [created, edited, deleted]
 jobs:
   test_matrix:
     if: ${{ github.event.issue.pull_request && contains( github.event.comment.body, '\pcm' ) }}
