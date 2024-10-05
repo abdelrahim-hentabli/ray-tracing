@@ -51,9 +51,16 @@ void Render_World::Render() {
   if (!hierarchy_initialized) {
     Initialize_Hierarchy();
   }
+  Ray ray;
+  for (int j = 0; j < camera.number_pixels[1]; j++) {
+#pragma omp parallel for num_threads(8) shared(camera) private(ray)
+    for (int i = 0; i < camera.number_pixels[0]; i++) {
+      ray = Ray(camera.position,
+                camera.World_Position(ivec2(i, j)) - camera.position);
 
-  for (int j = 0; j < camera.number_pixels[1]; j++)
-    for (int i = 0; i < camera.number_pixels[0]; i++) Render_Pixel(ivec2(i, j));
+      camera.Set_Pixel(ivec2(i, j), Pixel_Color(Cast_Ray(ray, 1)));
+    }
+  }
 }
 
 // cast ray and return the color of the closest intersected surface point,
