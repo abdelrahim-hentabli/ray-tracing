@@ -6,16 +6,12 @@
 #include "lights/light.hpp"
 #include "objects/object.hpp"
 #include "ray.hpp"
-#include "shaders/flat_shader.hpp"
+#include "shaders/shader.hpp"
 
 Render_World::Render_World()
-    : background_shader(0),
-      ambient_intensity(0),
-      enable_shadows(true),
-      recursion_depth_limit(3) {}
+    : ambient_intensity(0), enable_shadows(true), recursion_depth_limit(3) {}
 
 Render_World::~Render_World() {
-  if (!background_shader) delete background_shader;
   for (size_t i = 0; i < objects.size(); i++) delete objects[i];
   for (size_t i = 0; i < lights.size(); i++) delete lights[i];
 }
@@ -70,12 +66,12 @@ vec3 Render_World::Cast_Ray(const Ray &ray, int recursion_depth) {
   Hit closest = Closest_Intersection(ray);
   if (closest.object != nullptr) {
     vec3 point = ray.endpoint + closest.dist * ray.direction;
-    return closest.object->material_shader->Shade_Surface(
-        ray, point, closest.object->Normal(point, closest.part),
-        recursion_depth);
+    return Shade_Surface(ray, point,
+                         closest.object->Normal(point, closest.part),
+                         recursion_depth, *this, closest.object->sd);
   } else {
-    return background_shader->Shade_Surface(ray, {0, 0, 0}, -ray.direction,
-                                            recursion_depth);
+    return Shade_Surface(ray, {0, 0, 0}, -ray.direction, recursion_depth, *this,
+                         sd);
   }
 }
 

@@ -1,5 +1,9 @@
 #include "shaders/shader.hpp"
 
+#include "lights/light.hpp"
+#include "objects/object.hpp"
+#include "render_world.hpp"
+
 static inline vec3 reflect_vector(const vec3 &direction, const vec3 &normal) {
   return direction - 2 * dot(direction, normal) * normal;
 }
@@ -34,11 +38,13 @@ static inline vec3 phong(const Ray &ray, const vec3 &intersection_point,
   for (auto light : world.lights) {
     currentLightDir = light->position - intersection_point;
     normalizedLightDir = currentLightDir.normalized();
-    Hit closest =
-        world.Closest_Intersection(Ray(intersection_point, normalizedLightDir));
-    if (closest.object != nullptr) {
-      if (closest.dist < currentLightDir.magnitude()) {
-        continue;
+    if (world.enable_shadows) {
+      Hit closest = world.Closest_Intersection(
+          Ray(intersection_point, normalizedLightDir));
+      if (closest.object != nullptr) {
+        if (closest.dist < currentLightDir.magnitude()) {
+          continue;
+        }
       }
     }
     if (dot(currentLightDir, normal) < 1e-6) {
@@ -65,22 +71,21 @@ static inline vec3 phong(const Ray &ray, const vec3 &intersection_point,
 static inline vec3 reflect(const Ray &ray, const vec3 &intersection_point,
                            const vec3 &normal, int recursion_depth,
                            const Render_World &world) {
-  vec3 color = vec3();
+  vec3 color = vec3(0, 0, 0);
   if (recursion_depth >= world.recursion_depth_limit) {
     return color;
   }
   vec3 reflectionDir = reflect_vector(ray.direction, normal);
-
   Hit closest =
       world.Closest_Intersection(Ray(intersection_point, reflectionDir));
   if (closest.object != nullptr) {
     vec3 point = intersection_point + closest.dist * reflectionDir;
-    color = closest.object->material_shader->Shade_Surface(
-        Ray(intersection_point, reflectionDir), point,
-        closest.object->Normal(point, closest.part), recursion_depth + 1);
+    color = Shade_Surface(Ray(intersection_point, reflectionDir), point,
+                          closest.object->Normal(point, closest.part),
+                          recursion_depth + 1, world, closest.object->sd);
   } else {
-    color = world.background_shader->Shade_Surface(
-        Ray(intersection_point, reflectionDir), {0, 0, 0}, {0, 0, 0}, 0);
+    color = Shade_Surface(Ray(intersection_point, reflectionDir), {0, 0, 0},
+                          {0, 0, 0}, 0, world, world.sd);
   }
   return color;
 }
@@ -135,15 +140,14 @@ static inline vec3 refract(const Ray &ray, const vec3 &intersection_point,
         world.Closest_Intersection(Ray(refractionRayOrig, refractionDirection));
     if (closest.object != nullptr) {
       vec3 point = intersection_point + closest.dist * refractionDirection;
-      color +=
-          (1 - kr) * closest.object->material_shader->Shade_Surface(
-                         Ray(intersection_point, refractionDirection), point,
-                         closest.object->Normal(point, closest.part),
-                         recursion_depth + 1);
+      color += (1 - kr) *
+               Shade_Surface(Ray(intersection_point, refractionDirection),
+                             point, closest.object->Normal(point, closest.part),
+                             recursion_depth + 1, world, closest.object->sd);
     } else {
-      color += (1 - kr) * world.background_shader->Shade_Surface(
-                              Ray(intersection_point, refractionDirection),
-                              {0, 0, 0}, {0, 0, 0}, 0);
+      color +=
+          (1 - kr) * Shade_Surface(Ray(intersection_point, refractionDirection),
+                                   {0, 0, 0}, {0, 0, 0}, 0, world, world.sd);
     }
   }
 
@@ -154,63 +158,63 @@ static inline vec3 refract(const Ray &ray, const vec3 &intersection_point,
       world.Closest_Intersection(Ray(reflectionRayOrig, reflectionDirection));
   if (closest.object != nullptr) {
     vec3 point = intersection_point + closest.dist * reflectionDirection;
-    color += kr * closest.object->material_shader->Shade_Surface(
-                      Ray(intersection_point, reflectionDirection), point,
-                      closest.object->Normal(point, closest.part),
-                      recursion_depth + 1);
+    color +=
+        kr * Shade_Surface(Ray(intersection_point, reflectionDirection), point,
+                           closest.object->Normal(point, closest.part),
+                           recursion_depth + 1, world, closest.object->sd);
   } else {
-    color += kr * world.background_shader->Shade_Surface(
-                      Ray(intersection_point, reflectionDirection), {0, 0, 0},
-                      {0, 0, 0}, 0);
+    color += kr * Shade_Surface(Ray(intersection_point, reflectionDirection),
+                                {0, 0, 0}, {0, 0, 0}, 0, world, world.sd);
   }
 
   return color;
 }
 
-vec3 Shade_Surface(shader_type type, const Ray &ray,
-                   const vec3 &intersection_point, const vec3 &normal,
-                   int recursion_depth, const Render_World &world,
-                   const vec3 &color_ambient, const vec3 &color_diffuse,
-                   const vec3 &color_specular, double specular_power,
-                   double incidence_of_refraction, double color_intensity) {
+vec3 Shade_Surface(const Ray &ray, const vec3 &intersection_point,
+                   const vec3 &normal, int recursion_depth,
+                   const Render_World &world, const shader_data &sd) {
   vec3 color;
 
   // Object Color
-  switch (type) {
+  switch (sd.type) {
     case flat_shader:
-      color = color_ambient;
+      color = sd.color_ambient;
       break;
     case reflective_flat:
-      color = color_intensity * color_ambient +
-              (1 - color_intensity) * reflect(ray, intersection_point, normal,
-                                              recursion_depth, world);
+      color =
+          sd.color_intensity * sd.color_ambient +
+          (1 - sd.color_intensity) *
+              reflect(ray, intersection_point, normal, recursion_depth, world);
       break;
     case refractive_flat:
-      color = color_intensity * color_ambient +
-              (1 - color_intensity) *
-                  refract(ray, intersection_point, normal, recursion_depth,
-                          world, color_ambient, color_diffuse, color_specular,
-                          specular_power, incidence_of_refraction);
+      color =
+          sd.color_intensity * sd.color_ambient +
+          (1 - sd.color_intensity) *
+              refract(ray, intersection_point, normal, recursion_depth, world,
+                      sd.color_ambient, sd.color_diffuse, sd.color_specular,
+                      sd.specular_power, sd.incidence_of_refraction);
       break;
     case phong_shader:
-      color = phong(ray, intersection_point, normal, world, color_ambient,
-                    color_diffuse, color_specular, specular_power);
+      color = phong(ray, intersection_point, normal, world, sd.color_ambient,
+                    sd.color_diffuse, sd.color_specular, sd.specular_power);
       break;
     case reflective_phong:
-      color = color_intensity * phong(ray, intersection_point, normal, world,
-                                      color_ambient, color_diffuse,
-                                      color_specular, specular_power) +
-              (1 - color_intensity) * reflect(ray, intersection_point, normal,
-                                              recursion_depth, world);
+      color =
+          sd.color_intensity * phong(ray, intersection_point, normal, world,
+                                     sd.color_ambient, sd.color_diffuse,
+                                     sd.color_specular, sd.specular_power) +
+          (1 - sd.color_intensity) *
+              reflect(ray, intersection_point, normal, recursion_depth, world);
       break;
     case refractive_phong:
-      color = color_intensity * phong(ray, intersection_point, normal, world,
-                                      color_ambient, color_diffuse,
-                                      color_specular, specular_power) +
-              (1 - color_intensity) *
-                  refract(ray, intersection_point, normal, recursion_depth,
-                          world, color_ambient, color_diffuse, color_specular,
-                          specular_power, incidence_of_refraction);
+      color =
+          sd.color_intensity * phong(ray, intersection_point, normal, world,
+                                     sd.color_ambient, sd.color_diffuse,
+                                     sd.color_specular, sd.specular_power) +
+          (1 - sd.color_intensity) *
+              refract(ray, intersection_point, normal, recursion_depth, world,
+                      sd.color_ambient, sd.color_diffuse, sd.color_specular,
+                      sd.specular_power, sd.incidence_of_refraction);
       break;
     default:
       break;

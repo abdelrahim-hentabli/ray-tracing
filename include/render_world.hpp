@@ -5,17 +5,17 @@
 
 #include "acceleration_structures/hierarchy.hpp"
 #include "camera.hpp"
-#include "lights/light.hpp"
-#include "objects/object.hpp"
+#include "types.hpp"
 
+class Light;
+class Object;
 class Ray;
-class Shader;
 
 class Render_World {
  public:
   Camera camera;
 
-  Shader *background_shader;
+  shader_data sd;
   std::vector<Object *> objects;
   std::vector<Light *> lights;
   vec3 ambient_color;

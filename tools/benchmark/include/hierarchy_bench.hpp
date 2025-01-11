@@ -9,8 +9,6 @@
 #include "objects/mesh.hpp"
 #include "parse.hpp"
 #include "render_world.hpp"
-#include "shaders/flat_shader.hpp"
-#include "shaders/phong_shader.hpp"
 
 Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP,
                                  vec3 cameraL, vec3 cameraU) {
@@ -19,13 +17,19 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP,
   // Setup world
   world.enable_shadows = false;
   world.recursion_depth_limit = 1;
-  world.background_shader = new Flat_Shader(world, vec3());
+  shader_data temp;
+  temp.type = flat_shader;
+  world.sd = temp;
 
   // Setup objects
   Mesh *o = new Mesh;
   o->Read_Obj("sphere.obj");
-  o->material_shader =
-      new Phong_Shader(world, {1, 1, 1}, {1, 1, 1}, {1, 1, 1}, 50);
+  temp.type = phong_shader;
+  temp.color_ambient = {1, 1, 1};
+  temp.color_diffuse = {1, 1, 1};
+  temp.color_specular = {1, 1, 1};
+  temp.specular_power = 50;
+  o->sd = temp;
   world.objects.push_back(o);
 
   // Setup lights
