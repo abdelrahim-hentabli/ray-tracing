@@ -5,17 +5,17 @@
 
 #include "acceleration_structures/hierarchy.hpp"
 #include "camera.hpp"
-#include "objects/object.hpp"
+#include "types.hpp"
 
 class Light;
-class Shader;
+class Object;
 class Ray;
 
 class Render_World {
  public:
   Camera camera;
 
-  Shader *background_shader;
+  shader_data sd;
   std::vector<Object *> objects;
   std::vector<Light *> lights;
   vec3 ambient_color;
@@ -41,8 +41,9 @@ class Render_World {
   void Clear_Hierarchy();
 
   vec3 Cast_Ray(const Ray &ray, int recursion_depth);
-  Hit Closest_Intersection(const Ray &ray);
+  Hit Closest_Intersection(const Ray &ray) const;
 
   void Update(double deltaT);
 };
+
 #endif

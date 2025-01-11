@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "acceleration_structures/box.hpp"
+#include "types.hpp"
 #include "vec.hpp"
 
 // t has to be bigger than small_t to register an intersection with a ray.  You
@@ -13,8 +14,6 @@ static const double small_t = 1e-4;
 extern bool debug_pixel;
 
 class Ray;
-class Shader;
-class Object;
 
 struct Hit {
   const Object *object;  // object that was intersected
@@ -24,12 +23,12 @@ struct Hit {
 
 class Object {
  public:
-  Shader *material_shader;
+  shader_data sd;
 
   // the number of parts that this object contains.
   int number_parts;
 
-  Object() : material_shader(0), number_parts(1) {}
+  Object() : number_parts(1) {}
   virtual ~Object() {}
 
   // Check for an intersection against the ray.  If there was an

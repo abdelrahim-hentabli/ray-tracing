@@ -10,10 +10,7 @@
 #include "objects/mesh.hpp"
 #include "objects/plane.hpp"
 #include "objects/sphere.hpp"
-#include "shaders/flat_shader.hpp"
-#include "shaders/phong_shader.hpp"
-#include "shaders/reflective_shader.hpp"
-#include "shaders/refractive_shader.hpp"
+#include "types.hpp"
 
 void Parse(Render_World &world, int &width, int &height,
            const char *test_file) {
@@ -31,7 +28,11 @@ void Parse(Render_World &world, int &width, int &height,
 
   std::map<std::string, vec3> colors;
   std::map<std::string, Object *> objects;
-  std::map<std::string, Shader *> shaders;
+  std::map<std::string, shader_data> shaders;
+
+  shader_data default_bg;
+  default_bg.type = flat_shader;
+  world.sd = default_bg;
 
   while (fgets(buff, sizeof(buff), F)) {
     std::stringstream ss(buff);
@@ -48,9 +49,9 @@ void Parse(Render_World &world, int &width, int &height,
       ss >> name >> u >> v >> s0;
       assert(ss);
       Object *o = new Plane(u, v);
-      std::map<std::string, Shader *>::const_iterator sh = shaders.find(s0);
+      std::map<std::string, shader_data>::const_iterator sh = shaders.find(s0);
       assert(sh != shaders.end());
-      o->material_shader = sh->second;
+      o->sd = sh->second;
       if (name == "-")
         world.objects.push_back(o);
       else
@@ -59,9 +60,9 @@ void Parse(Render_World &world, int &width, int &height,
       ss >> name >> u >> f0 >> s0;
       assert(ss);
       Object *o = new Sphere(u, f0);
-      std::map<std::string, Shader *>::const_iterator sh = shaders.find(s0);
+      std::map<std::string, shader_data>::const_iterator sh = shaders.find(s0);
       assert(sh != shaders.end());
-      o->material_shader = sh->second;
+      o->sd = sh->second;
       if (name == "-")
         world.objects.push_back(o);
       else
@@ -71,9 +72,9 @@ void Parse(Render_World &world, int &width, int &height,
       assert(ss);
       Mesh *o = new Mesh;
       o->Read_Obj(s0.c_str());
-      std::map<std::string, Shader *>::const_iterator sh = shaders.find(s1);
+      std::map<std::string, shader_data>::const_iterator sh = shaders.find(s1);
       assert(sh != shaders.end());
-      o->material_shader = sh->second;
+      o->sd = sh->second;
       if (name == "-")
         world.objects.push_back(o);
       else
@@ -83,7 +84,10 @@ void Parse(Render_World &world, int &width, int &height,
       assert(ss);
       std::map<std::string, vec3>::const_iterator c0 = colors.find(s0);
       assert(c0 != colors.end());
-      shaders[name] = new Flat_Shader(world, c0->second);
+      shader_data temp;
+      temp.type = flat_shader;
+      temp.color_ambient = c0->second;
+      shaders[name] = temp;
     } else if (item == "phong_shader") {
       ss >> name >> s0 >> s1 >> s2 >> f0;
       assert(ss);
@@ -93,20 +97,64 @@ void Parse(Render_World &world, int &width, int &height,
       assert(c0 != colors.end());
       assert(c1 != colors.end());
       assert(c2 != colors.end());
-      shaders[name] =
-          new Phong_Shader(world, c0->second, c1->second, c2->second, f0);
+      shader_data temp;
+      temp.type = phong_shader;
+      temp.color_ambient = c0->second;
+      temp.color_diffuse = c1->second;
+      temp.color_specular = c2->second;
+      temp.specular_power = f0;
+      shaders[name] = temp;
     } else if (item == "reflective_shader") {
       ss >> name >> s0 >> f0;
       assert(ss);
-      std::map<std::string, Shader *>::const_iterator sh = shaders.find(s0);
+      std::map<std::string, shader_data>::const_iterator sh = shaders.find(s0);
       assert(sh != shaders.end());
-      shaders[name] = new Reflective_Shader(world, sh->second, f0);
+      shader_data temp;
+      switch (sh->second.type) {
+        case (flat_shader):
+          temp.type = reflective_flat;
+          temp.color_ambient = sh->second.color_ambient;
+          break;
+        case (phong_shader):
+          temp.type = reflective_phong;
+          temp.color_ambient = sh->second.color_ambient;
+          temp.color_diffuse = sh->second.color_diffuse;
+          temp.color_specular = sh->second.color_specular;
+          temp.specular_power = sh->second.specular_power;
+          break;
+        default:
+          temp.type = reflective_flat;
+          temp.color_ambient = sh->second.color_ambient;
+          break;
+      }
+      temp.color_intensity = (1 - f0);
+      shaders[name] = temp;
     } else if (item == "refractive_shader") {
       ss >> name >> s0 >> ior >> ci;
       assert(ss);
-      std::map<std::string, Shader *>::const_iterator sh = shaders.find(s0);
+      std::map<std::string, shader_data>::const_iterator sh = shaders.find(s0);
       assert(sh != shaders.end());
-      shaders[name] = new Refractive_Shader(world, sh->second, ior, ci);
+      shader_data temp;
+      switch (sh->second.type) {
+        case (flat_shader):
+          temp.type = refractive_flat;
+          temp.color_ambient = sh->second.color_ambient;
+          break;
+        case (phong_shader):
+          temp.type = refractive_phong;
+          temp.color_ambient = sh->second.color_ambient;
+          temp.color_diffuse = sh->second.color_diffuse;
+          temp.color_specular = sh->second.color_specular;
+          temp.specular_power = sh->second.specular_power;
+          break;
+        default:
+          temp.type = refractive_flat;
+          temp.color_ambient = sh->second.color_ambient;
+          break;
+      }
+      temp.incidence_of_refraction = ior;
+      temp.color_intensity = ci;
+      shaders[name] = temp;
     } else if (item == "point_light") {
       ss >> u >> s0 >> f0;
       assert(ss);
@@ -145,9 +193,9 @@ void Parse(Render_World &world, int &width, int &height,
     } else if (item == "background") {
       ss >> s0;
       assert(ss);
-      std::map<std::string, Shader *>::const_iterator sh = shaders.find(s0);
+      std::map<std::string, shader_data>::const_iterator sh = shaders.find(s0);
       assert(sh != shaders.end());
-      world.background_shader = sh->second;
+      world.sd = sh->second;
     } else if (item == "enable_shadows") {
       ss >> world.enable_shadows;
       assert(ss);
@@ -159,7 +207,5 @@ void Parse(Render_World &world, int &width, int &height,
       exit(EXIT_FAILURE);
     }
   }
-  if (!world.background_shader)
-    world.background_shader = new Flat_Shader(world, vec3());
   world.camera.Set_Resolution(ivec2(width, height));
 }

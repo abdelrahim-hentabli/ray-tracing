@@ -7,8 +7,6 @@
 #include "lights/point_light.hpp"
 #include "objects/mesh.hpp"
 #include "parse.hpp"
-#include "shaders/flat_shader.hpp"
-#include "shaders/phong_shader.hpp"
 
 void test_file(std::string case_name) {
   int width = 0;
@@ -88,13 +86,20 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP,
   // Setup world
   world.enable_shadows = false;
   world.recursion_depth_limit = 1;
-  world.background_shader = new Flat_Shader(world, vec3());
+  shader_data default_bg;
+  default_bg.type = flat_shader;
+  world.sd = default_bg;
 
   // Setup objects
   Mesh *o = new Mesh;
   o->Read_Obj("sphere.obj");
-  o->material_shader =
-      new Phong_Shader(world, {1, 1, 1}, {1, 1, 1}, {1, 1, 1}, 50);
+  shader_data temp;
+  temp.type = phong_shader;
+  temp.color_ambient = {1, 1, 1};
+  temp.color_diffuse = {1, 1, 1};
+  temp.color_specular = {1, 1, 1};
+  temp.specular_power = 50;
+  o->sd = temp;
   world.objects.push_back(o);
 
   // Setup lights
