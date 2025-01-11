@@ -5,11 +5,11 @@
 
 #include "acceleration_structures/hierarchy.hpp"
 #include "camera.hpp"
+#include "lights/light.hpp"
 #include "objects/object.hpp"
 
-class Light;
-class Shader;
 class Ray;
+class Shader;
 
 class Render_World {
  public:
@@ -41,8 +41,9 @@ class Render_World {
   void Clear_Hierarchy();
 
   vec3 Cast_Ray(const Ray &ray, int recursion_depth);
-  Hit Closest_Intersection(const Ray &ray);
+  Hit Closest_Intersection(const Ray &ray) const;
 
   void Update(double deltaT);
 };
+
 #endif

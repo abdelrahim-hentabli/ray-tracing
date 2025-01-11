@@ -14,7 +14,6 @@ extern bool debug_pixel;
 
 class Ray;
 class Shader;
-class Object;
 
 struct Hit {
   const Object *object;  // object that was intersected
