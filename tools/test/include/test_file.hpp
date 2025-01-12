@@ -4,7 +4,7 @@
 #include "directories.hpp"
 #include "dump_png.hpp"
 #include "gtest/gtest.h"
-#include "lights/point_light.hpp"
+#include "lights/light.hpp"
 #include "objects/mesh.hpp"
 #include "parse.hpp"
 
@@ -103,7 +103,12 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP,
   world.objects.push_back(o);
 
   // Setup lights
-  world.lights.push_back(new Point_Light(vec3(.8, .8, 4), vec3(1, 1, 1), 100));
+  light_data ld;
+  ld.type = point_light;
+  ld.position = vec3(.8, .8, 4);
+  ld.color = vec3(1, 1, 1);
+  ld.brightness = 100;
+  world.lights.push_back(ld);
   world.ambient_color = {1, 1, 1};
   world.ambient_intensity = 0;
 

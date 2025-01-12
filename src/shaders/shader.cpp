@@ -36,7 +36,7 @@ static inline vec3 phong(const Ray &ray, const vec3 &intersection_point,
   vec3 reflectionDir;
   vec3 normalizedLightDir;
   for (auto light : world.lights) {
-    currentLightDir = light->position - intersection_point;
+    currentLightDir = light.position - intersection_point;
     normalizedLightDir = currentLightDir.normalized();
     if (world.enable_shadows) {
       Hit closest = world.Closest_Intersection(
@@ -51,7 +51,7 @@ static inline vec3 phong(const Ray &ray, const vec3 &intersection_point,
       continue;
     } else {
       normalizedLightDir = currentLightDir.normalized();
-      currentLightIntensity = light->Emitted_Light(currentLightDir);
+      currentLightIntensity = Emitted_Light(currentLightDir, light);
       diffuse += currentLightIntensity *
                  std::max(0.0, dot(normal, normalizedLightDir));
 
