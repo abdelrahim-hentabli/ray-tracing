@@ -5,7 +5,7 @@
 
 #include "acceleration_structures/hierarchy.hpp"
 #include "directories.hpp"
-#include "lights/point_light.hpp"
+#include "lights/light.hpp"
 #include "objects/mesh.hpp"
 #include "parse.hpp"
 #include "render_world.hpp"
@@ -17,23 +17,28 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP,
   // Setup world
   world.enable_shadows = false;
   world.recursion_depth_limit = 1;
-  shader_data temp;
-  temp.type = flat_shader;
-  world.sd = temp;
+  shader_data sd;
+  sd.type = flat_shader;
+  world.sd = sd;
 
   // Setup objects
   Mesh *o = new Mesh;
   o->Read_Obj("sphere.obj");
-  temp.type = phong_shader;
-  temp.color_ambient = {1, 1, 1};
-  temp.color_diffuse = {1, 1, 1};
-  temp.color_specular = {1, 1, 1};
-  temp.specular_power = 50;
-  o->sd = temp;
+  sd.type = phong_shader;
+  sd.color_ambient = {1, 1, 1};
+  sd.color_diffuse = {1, 1, 1};
+  sd.color_specular = {1, 1, 1};
+  sd.specular_power = 50;
+  o->sd = sd;
   world.objects.push_back(o);
 
   // Setup lights
-  world.lights.push_back(new Point_Light(vec3(.8, .8, 4), vec3(1, 1, 1), 100));
+  light_data ld;
+  ld.type = point_light;
+  ld.position = vec3(.8, .8, 4);
+  ld.color = vec3(1, 1, 1);
+  ld.brightness = 100;
+  world.lights.push_back(ld);
   world.ambient_color = {1, 1, 1};
   world.ambient_intensity = 0;
 

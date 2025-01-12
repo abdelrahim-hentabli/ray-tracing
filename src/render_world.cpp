@@ -13,7 +13,6 @@ Render_World::Render_World()
 
 Render_World::~Render_World() {
   for (size_t i = 0; i < objects.size(); i++) delete objects[i];
-  for (size_t i = 0; i < lights.size(); i++) delete lights[i];
 }
 
 // Find and return the Hit structure for the closest intersection.  Be careful

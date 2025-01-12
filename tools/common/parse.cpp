@@ -4,9 +4,7 @@
 #include <sstream>
 #include <string>
 
-#include "lights/direction_light.hpp"
-#include "lights/point_light.hpp"
-#include "lights/spot_light.hpp"
+#include "lights/light.hpp"
 #include "objects/mesh.hpp"
 #include "objects/plane.hpp"
 #include "objects/sphere.hpp"
@@ -160,13 +158,23 @@ void Parse(Render_World &world, int &width, int &height,
       assert(ss);
       std::map<std::string, vec3>::const_iterator c0 = colors.find(s0);
       assert(c0 != colors.end());
-      world.lights.push_back(new Point_Light(u, c0->second, f0));
+      light_data temp;
+      temp.type = point_light;
+      temp.position = u;
+      temp.color = c0->second;
+      temp.brightness = f0;
+      world.lights.push_back(temp);
     } else if (item == "direction_light") {
       ss >> u >> s0 >> f0;
       assert(ss);
       std::map<std::string, vec3>::const_iterator c0 = colors.find(s0);
       assert(c0 != colors.end());
-      world.lights.push_back(new Direction_Light(u, c0->second, f0));
+      light_data temp;
+      temp.type = direction_light;
+      temp.position = u;
+      temp.color = c0->second;
+      temp.brightness = f0;
+      world.lights.push_back(temp);
     } else if (item == "spot_light") {
       double max_angle, exponent;
       vec3 direction;
@@ -174,8 +182,15 @@ void Parse(Render_World &world, int &width, int &height,
       assert(ss);
       std::map<std::string, vec3>::const_iterator c0 = colors.find(s0);
       assert(c0 != colors.end());
-      world.lights.push_back(
-          new Spot_Light(u, c0->second, f0, max_angle, exponent, direction));
+      light_data temp;
+      temp.type = spot_light;
+      temp.position = u;
+      temp.color = c0->second;
+      temp.brightness = f0;
+      temp.min_cos_angle = max_angle;
+      temp.falloff_exponent = exponent;
+      temp.direction = direction;
+      world.lights.push_back(temp);
     } else if (item == "ambient_light") {
       ss >> s0 >> f0;
       assert(ss);

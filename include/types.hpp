@@ -15,11 +15,27 @@ enum shader_type {
 struct shader_data {
   shader_type type;
   vec3 color_ambient;
-  vec3 color_diffuse;
-  vec3 color_specular;
-  double specular_power;
-  double incidence_of_refraction;
-  double color_intensity;
+  vec3 color_diffuse;              // phong based
+  vec3 color_specular;             // phong based
+  double specular_power;           // phong based
+  double incidence_of_refraction;  // refraction shader
+  double color_intensity;          // reflect/refract
+};
+
+enum light_type {
+  point_light = 1U,
+  direction_light = 2U,
+  spot_light = 3U,
+};
+
+struct light_data {
+  light_type type;
+  vec3 position;
+  vec3 color;
+  double brightness;
+  double min_cos_angle;     // Spot Light
+  double falloff_exponent;  // Spot Light
+  vec3 direction;           // Spot Light
 };
 
 #endif  //__TYPES_H__

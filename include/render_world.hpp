@@ -7,7 +7,6 @@
 #include "camera.hpp"
 #include "types.hpp"
 
-class Light;
 class Object;
 class Ray;
 
@@ -17,7 +16,7 @@ class Render_World {
 
   shader_data sd;
   std::vector<Object *> objects;
-  std::vector<Light *> lights;
+  std::vector<light_data> lights;
   vec3 ambient_color;
   double ambient_intensity;
 

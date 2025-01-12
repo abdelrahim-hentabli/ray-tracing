@@ -7,23 +7,12 @@
 #include <limits>
 #include <vector>
 
+#include "misc.hpp"
+#include "types.hpp"
 #include "vec.hpp"
 
 class Ray;
 
-class Light {
- public:
-  vec3 position;
-  vec3 color;  // RGB color components
-  double brightness;
+vec3 Emitted_Light(const vec3& vector_to_light, const light_data& ld);
 
-  Light() : position(), color(1, 1, 1), brightness(1) {}
-
-  Light(const vec3 &position, const vec3 &color, double brightness)
-      : position(position), color(color), brightness(brightness) {}
-
-  virtual ~Light() {}
-
-  virtual vec3 Emitted_Light(const vec3 &vector_to_light) const = 0;
-};
 #endif
