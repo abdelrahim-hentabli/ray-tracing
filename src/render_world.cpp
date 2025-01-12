@@ -3,10 +3,10 @@
 #include <limits>
 
 #include "acceleration_structures/hierarchy.hpp"
-#include "lights/light.hpp"
+#include "lights.hpp"
 #include "objects/object.hpp"
 #include "ray.hpp"
-#include "shaders/shader.hpp"
+#include "shaders.hpp"
 
 Render_World::Render_World()
     : ambient_intensity(0), enable_shadows(true), recursion_depth_limit(3) {}

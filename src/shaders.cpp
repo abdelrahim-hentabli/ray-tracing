@@ -1,6 +1,6 @@
-#include "shaders/shader.hpp"
+#include "shaders.hpp"
 
-#include "lights/light.hpp"
+#include "lights.hpp"
 #include "objects/object.hpp"
 #include "render_world.hpp"
 

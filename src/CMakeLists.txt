@@ -1,7 +1,6 @@
 file(GLOB RAY_TRACER_SOURCES
     acceleration_structures/*.cpp
     objects/*.cpp
-    shaders/*.cpp
     *.cpp)
 
 add_library(ray_tracer SHARED ${RAY_TRACER_SOURCES})
