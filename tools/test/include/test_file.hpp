@@ -4,7 +4,7 @@
 #include "directories.hpp"
 #include "dump_png.hpp"
 #include "gtest/gtest.h"
-#include "lights/light.hpp"
+#include "lights.hpp"
 #include "objects/mesh.hpp"
 #include "parse.hpp"
 

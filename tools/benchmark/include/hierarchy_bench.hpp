@@ -5,7 +5,7 @@
 
 #include "acceleration_structures/hierarchy.hpp"
 #include "directories.hpp"
-#include "lights/light.hpp"
+#include "lights.hpp"
 #include "objects/mesh.hpp"
 #include "parse.hpp"
 #include "render_world.hpp"

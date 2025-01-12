@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 
-#include "lights/light.hpp"
+#include "lights.hpp"
 #include "objects/mesh.hpp"
 #include "objects/plane.hpp"
 #include "objects/sphere.hpp"

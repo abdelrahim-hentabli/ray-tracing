@@ -1,4 +1,4 @@
-#include "lights/light.hpp"
+#include "lights.hpp"
 
 vec3 Emitted_Light(const vec3& vector_to_light, const light_data& ld) {
   switch (ld.type) {
