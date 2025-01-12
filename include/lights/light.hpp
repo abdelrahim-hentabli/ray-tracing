@@ -7,12 +7,12 @@
 #include <limits>
 #include <vector>
 
+#include "misc.hpp"
 #include "types.hpp"
 #include "vec.hpp"
-#include "misc.hpp"
 
 class Ray;
 
-vec3 Emitted_Light(const vec3 &vector_to_light, const light_data& ld);
+vec3 Emitted_Light(const vec3& vector_to_light, const light_data& ld);
 
 #endif
