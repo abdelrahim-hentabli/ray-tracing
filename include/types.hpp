@@ -47,9 +47,9 @@ struct object_data {
   shader_data* shader;
   object_type type;
   vec3 position;
-  vec3 position2; //triangle
-  vec3 position3; //triangle
-  vec3 normal; // plane
+  vec3 position2;  // triangle
+  vec3 position3;  // triangle
+  vec3 normal;     // plane
 
-  double radius; // sphere
-}
+  double radius;  // sphere
+};
