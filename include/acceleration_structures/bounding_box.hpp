@@ -1,5 +1,4 @@
-#ifndef __BOUNDING_BOX_H__
-#define __BOUNDING_BOX_H__
+#pragma once
 
 // #####################################################################
 //  Function #in
@@ -31,5 +30,3 @@ class Bounding_Box {
 
   Bounding_Box Union(const Bounding_Box &bb) const;
 };
-
-#endif

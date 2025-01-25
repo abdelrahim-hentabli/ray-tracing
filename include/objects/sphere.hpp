@@ -1,5 +1,4 @@
-#ifndef __SPHERE_H__
-#define __SPHERE_H__
+#pragma once
 
 #include "objects/object.hpp"
 
@@ -20,5 +19,3 @@ class Sphere : public Object {
   virtual Box Bounding_Box(int part) const override;
   void Update(double deltaT) override;
 };
-
-#endif

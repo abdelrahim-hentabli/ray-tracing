@@ -1,5 +1,4 @@
-#ifndef __vec__
-#define __vec__
+#pragma once
 
 #include <cassert>
 #include <cmath>
@@ -192,5 +191,3 @@ typedef vec<double, 2> vec2;
 typedef vec<double, 3> vec3;
 typedef vec<int, 2> ivec2;
 typedef vec<int, 3> ivec3;
-
-#endif

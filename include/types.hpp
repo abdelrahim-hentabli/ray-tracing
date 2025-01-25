@@ -1,5 +1,4 @@
-#ifndef __TYPES_H__
-#define __TYPES_H__
+#pragma once
 
 #include "vec.hpp"
 
@@ -37,5 +36,3 @@ struct light_data {
   double falloff_exponent;  // Spot Light
   vec3 direction;           // Spot Light
 };
-
-#endif  //__TYPES_H__

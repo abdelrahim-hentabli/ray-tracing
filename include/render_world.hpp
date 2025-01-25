@@ -1,5 +1,4 @@
-#ifndef __RENDER_WORLD_H__
-#define __RENDER_WORLD_H__
+#pragma once
 
 #include <vector>
 
@@ -44,5 +43,3 @@ class Render_World {
 
   void Update(double deltaT);
 };
-
-#endif

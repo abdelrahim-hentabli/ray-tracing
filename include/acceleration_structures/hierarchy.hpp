@@ -1,5 +1,4 @@
-#ifndef __HIERARCHY_H__
-#define __HIERARCHY_H__
+#pragma once
 
 #include "objects/object.hpp"
 
@@ -51,4 +50,3 @@ class Hierarchy {
 
   void Update();
 };
-#endif

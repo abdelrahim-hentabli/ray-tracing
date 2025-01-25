@@ -1,5 +1,4 @@
-#ifndef __BENCHMARK_HIERARCHY_HPP__
-#define __BENCHMARK_HIERARCHY_HPP__
+#pragma once
 
 #include <benchmark/benchmark.h>
 
@@ -172,5 +171,3 @@ static void BM_drawWOHierarchy(benchmark::State &state) {
 }
 
 BENCHMARK(BM_drawWOHierarchy)->Unit(benchmark::kMillisecond);
-
-#endif  // __BENCHMARK_HIERARCHY_HPP__
