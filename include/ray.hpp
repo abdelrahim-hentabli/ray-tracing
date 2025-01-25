@@ -1,5 +1,4 @@
-#ifndef __RAY_H__
-#define __RAY_H__
+#pragma once
 
 #include "vec.hpp"
 
@@ -16,4 +15,3 @@ class Ray {
 
   vec3 Point(double t) const { return endpoint + direction * t; }
 };
-#endif

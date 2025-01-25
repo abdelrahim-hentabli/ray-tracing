@@ -1,5 +1,4 @@
-#ifndef __PLANE_H__
-#define __PLANE_H__
+#pragma once
 
 #include "objects/object.hpp"
 
@@ -19,5 +18,3 @@ class Plane : public Object {
   virtual Box Bounding_Box(int part) const override;
   void Update(double deltaT) override;
 };
-
-#endif

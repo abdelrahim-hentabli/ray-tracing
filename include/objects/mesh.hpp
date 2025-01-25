@@ -1,5 +1,4 @@
-#ifndef __MESH_H__
-#define __MESH_H__
+#pragma once
 
 #include "objects/object.hpp"
 
@@ -25,5 +24,3 @@ class Mesh : public Object {
   Box Bounding_Box(int part) const override;
   void Update(double deltaT) override;
 };
-
-#endif

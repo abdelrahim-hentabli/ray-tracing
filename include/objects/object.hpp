@@ -1,5 +1,4 @@
-#ifndef __OBJECT_H__
-#define __OBJECT_H__
+#pragma once
 
 #include <vector>
 
@@ -55,5 +54,3 @@ class Object {
   virtual Box Bounding_Box(int part) const = 0;
   virtual void Update(double deltaT) = 0;
 };
-
-#endif

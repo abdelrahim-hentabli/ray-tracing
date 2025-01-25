@@ -1,5 +1,4 @@
-#ifndef __LIGHT_H__
-#define __LIGHT_H__
+#pragma once
 
 #include <math.h>
 
@@ -14,5 +13,3 @@
 class Ray;
 
 vec3 Emitted_Light(const vec3& vector_to_light, const light_data& ld);
-
-#endif

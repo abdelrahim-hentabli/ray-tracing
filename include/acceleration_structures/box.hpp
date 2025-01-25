@@ -1,5 +1,4 @@
-#ifndef __BOX_H__
-#define __BOX_H__
+#pragma once
 
 #include <limits>
 
@@ -27,4 +26,3 @@ class Box {
 
   vec3 Get_Center();
 };
-#endif

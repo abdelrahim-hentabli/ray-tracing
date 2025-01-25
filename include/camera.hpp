@@ -1,5 +1,4 @@
-#ifndef __CAMERA_H__
-#define __CAMERA_H__
+#pragma once
 
 #include <algorithm>
 
@@ -76,4 +75,3 @@ class Camera {
   void Update(double deltaT);
   void Clear_Camera();
 };
-#endif

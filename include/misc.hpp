@@ -1,5 +1,4 @@
-#ifndef __MISC_H__
-#define __MISC_H__
+#pragma once
 
 #include <iostream>
 
@@ -10,5 +9,3 @@
                                           << " in " << __FILE__ << std::endl; \
     (void)todo;                                                               \
   }
-
-#endif

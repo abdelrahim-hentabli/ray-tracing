@@ -1,6 +1,4 @@
-#ifndef TEST_FILE_HPP
-#define TEST_FILE_HPP
-
+#pragma once
 #include "directories.hpp"
 #include "dump_png.hpp"
 #include "gtest/gtest.h"
@@ -161,4 +159,3 @@ void test_benchmark() {
 }
 
 TEST(simple, bench) { test_benchmark(); }
-#endif  // TEST_FILE_HPP
