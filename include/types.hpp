@@ -36,3 +36,20 @@ struct light_data {
   double falloff_exponent;  // Spot Light
   vec3 direction;           // Spot Light
 };
+
+enum object_type {
+  sphere = 1U,
+  plane = 2U,
+  mesh = 3U,
+};
+
+struct object_data {
+  shader_data* shader;
+  object_type type;
+  vec3 position;
+  vec3 position2; //triangle
+  vec3 position3; //triangle
+  vec3 normal; // plane
+
+  double radius; // sphere
+}
