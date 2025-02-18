@@ -20,6 +20,15 @@ struct Hit {
   int part;              // which part was intersected (eg, for meshes)
 };
 
+struct New_Hit {
+  const object_data *object;  // object that was intersected
+  double dist;                // distance along ray to intersection location
+};
+
+New_Hit Intersection(const Ray &ray, const object_data &od);
+vec3 Normal(const vec3 &point, const object_data &od);
+Box Bounding_Box(const object_data &od);
+
 class Object {
  public:
   shader_data sd;

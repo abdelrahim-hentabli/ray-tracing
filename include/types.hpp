@@ -40,15 +40,15 @@ struct light_data {
 enum object_type {
   sphere = 1U,
   plane = 2U,
-  mesh = 3U,
+  triangle = 3U,
 };
 
 struct object_data {
   shader_data* shader;
   object_type type;
   vec3 position;
+  vec3 position1;  // triangle
   vec3 position2;  // triangle
-  vec3 position3;  // triangle
   vec3 normal;     // plane
 
   double radius;  // sphere
