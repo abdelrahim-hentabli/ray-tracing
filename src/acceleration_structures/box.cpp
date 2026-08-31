@@ -3,7 +3,7 @@
 #include <limits>
 
 // Return whether the ray intersects this box.
-bool Box::Intersection(const Ray &ray) const {
+bool Box::Intersection(const Ray& ray) const {
   double tmin = (lo[0] - ray.endpoint[0]) / ray.direction[0];
   double tmax = (hi[0] - ray.endpoint[0]) / ray.direction[0];
 
@@ -39,7 +39,7 @@ bool Box::Intersection(const Ray &ray) const {
 }
 
 // Compute the smallest box that contains both *this and bb.
-Box Box::Union(const Box &bb) const {
+Box Box::Union(const Box& bb) const {
   Box box;
   for (int axis = 0; axis < 3; axis++) {
     box.hi[axis] = std::max(hi[axis], bb.hi[axis]);
@@ -49,7 +49,7 @@ Box Box::Union(const Box &bb) const {
 }
 
 // Enlarge this box (if necessary) so that pt also lies inside it.
-void Box::Include_Point(const vec3 &pt) {
+void Box::Include_Point(const vec3& pt) {
   for (int axis = 0; axis < 3; axis++) {
     hi[axis] = std::max(hi[axis], pt[axis]);
     lo[axis] = std::min(lo[axis], pt[axis]);

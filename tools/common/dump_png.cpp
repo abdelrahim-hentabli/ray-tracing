@@ -4,8 +4,8 @@
 
 #include <cassert>
 
-void Dump_png(Pixel *data, int width, int height, const char *filename) {
-  FILE *file = fopen(filename, "wb");
+void Dump_png(Pixel* data, int width, int height, const char* filename) {
+  FILE* file = fopen(filename, "wb");
   assert(file);
 
   png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
@@ -20,10 +20,10 @@ void Dump_png(Pixel *data, int width, int height, const char *filename) {
                PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
                PNG_FILTER_TYPE_DEFAULT);
 
-  Pixel **row_pointers = new Pixel *[height];
+  Pixel** row_pointers = new Pixel*[height];
   for (int j = 0; j < height; j++)
     row_pointers[j] = data + width * (height - j - 1);
-  png_set_rows(png_ptr, info_ptr, (png_byte **)row_pointers);
+  png_set_rows(png_ptr, info_ptr, (png_byte**)row_pointers);
   png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_BGR | PNG_TRANSFORM_SWAP_ALPHA,
                 0);
   delete[] row_pointers;
@@ -31,8 +31,8 @@ void Dump_png(Pixel *data, int width, int height, const char *filename) {
   fclose(file);
 }
 
-void Read_png(Pixel *&data, int &width, int &height, const char *filename) {
-  FILE *file = fopen(filename, "rb");
+void Read_png(Pixel*& data, int& width, int& height, const char* filename) {
+  FILE* file = fopen(filename, "rb");
   assert(file);
 
   unsigned char header[8];
