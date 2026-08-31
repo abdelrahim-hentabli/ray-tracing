@@ -17,7 +17,7 @@ Render_World::~Render_World() {
 
 // Find and return the Hit structure for the closest intersection.  Be careful
 // to ensure that hit.dist>=small_t.
-Hit Render_World::Closest_Intersection(const Ray &ray) const {
+Hit Render_World::Closest_Intersection(const Ray& ray) const {
   Hit temp;
   Hit output{nullptr, std::numeric_limits<double>::max(), 0};
   std::vector<int> candidates;
@@ -35,7 +35,7 @@ Hit Render_World::Closest_Intersection(const Ray &ray) const {
 }
 
 // set up the initial view ray and call
-void Render_World::Render_Pixel(const ivec2 &pixel_index) {
+void Render_World::Render_Pixel(const ivec2& pixel_index) {
   Ray ray = Ray(camera.position,
                 camera.World_Position(pixel_index) - camera.position);
   vec3 color = Cast_Ray(ray, 1);
@@ -60,7 +60,7 @@ void Render_World::Render() {
 
 // cast ray and return the color of the closest intersected surface point,
 // or the background color if there is no object intersection
-vec3 Render_World::Cast_Ray(const Ray &ray, int recursion_depth) {
+vec3 Render_World::Cast_Ray(const Ray& ray, int recursion_depth) {
   vec3 color;
   Hit closest = Closest_Intersection(ray);
   if (closest.object != nullptr) {
@@ -81,7 +81,7 @@ void Render_World::Initialize_Hierarchy() {
   hierarchy_initialized = true;
   // Fill in hierarchy.entries; there should be one entry for
   // each part of each object.
-  for (Object *object : objects) {
+  for (Object* object : objects) {
     for (int i = 0; i < object->number_parts; i++) {
       hierarchy.entries.push_back({object, i, object->Bounding_Box(i)});
     }
@@ -102,7 +102,7 @@ void Render_World::Update(double deltaT) {
     return;
   }
   camera.Update(deltaT);
-  for (Object *object : objects) {
+  for (Object* object : objects) {
     object->Update(deltaT);
   }
   hierarchy.Update();

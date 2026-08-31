@@ -9,14 +9,14 @@
 #include "dump_mp4.hpp"
 #include "parse.hpp"
 
-void Usage(const char *exec) {
+void Usage(const char* exec) {
   std::cerr << "Usage: " << exec << " -i <test-file>" << std::endl;
   exit(1);
 }
 
-int main(int argc, char **argv) {
-  const char *input_file = 0;
-  Pixel **data = nullptr;
+int main(int argc, char** argv) {
+  const char* input_file = 0;
+  Pixel** data = nullptr;
 
   // Parse commandline options
   while (1) {
@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
   constexpr int SECONDS = 3;
   constexpr double DELTA = double(FPS) / double(SECONDS);
 
-  data = new Pixel *[(FPS * SECONDS) + 1];
+  data = new Pixel*[(FPS * SECONDS) + 1];
 
   for (int i = 0; i <= FPS * SECONDS; i++) {
     world.Render();
