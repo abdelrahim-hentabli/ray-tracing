@@ -21,7 +21,7 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP,
   world.sd = sd;
 
   // Setup objects
-  Mesh *o = new Mesh;
+  Mesh* o = new Mesh;
   o->Read_Obj("sphere.obj");
   sd.type = phong_shader;
   sd.color_ambient = {1, 1, 1};
@@ -50,7 +50,7 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP,
   return world;
 }
 
-static void BM_setupHierarchy(benchmark::State &state) {
+static void BM_setupHierarchy(benchmark::State& state) {
   int width = 0;
   int height = 0;
   Render_World world = std::move(SetupBenchmarkWorld(
@@ -66,7 +66,7 @@ BENCHMARK(BM_setupHierarchy)->Unit(benchmark::kMillisecond);
 
 class IntersectionCandidatesFixture : public benchmark::Fixture {
  public:
-  void SetUp(::benchmark::State &state) {
+  void SetUp(::benchmark::State& state) {
     Camera tempCamera;
     vec3 look = {0, 0, 0};
     vec3 up = {0, 1, 0};
@@ -111,7 +111,7 @@ class IntersectionCandidatesFixture : public benchmark::Fixture {
     }
   }
 
-  void TearDown(::benchmark::State &state) {}
+  void TearDown(::benchmark::State& state) {}
 
  public:
   std::vector<vec3> cardinal_directions;
@@ -124,7 +124,7 @@ class IntersectionCandidatesFixture : public benchmark::Fixture {
 };
 
 BENCHMARK_DEFINE_F(IntersectionCandidatesFixture, NominalDirections)
-(benchmark::State &state) {
+(benchmark::State& state) {
   Ray ray;
   int current_camera_index = state.range(0);
   state.SetLabel(direction_names[current_camera_index]);
@@ -147,7 +147,7 @@ BENCHMARK_REGISTER_F(IntersectionCandidatesFixture, NominalDirections)
     ->DenseRange(0, 5, 1)
     ->Unit(benchmark::kMillisecond);
 
-static void BM_drawWHierarchy(benchmark::State &state) {
+static void BM_drawWHierarchy(benchmark::State& state) {
   int width = 0;
   int height = 0;
   Render_World world = std::move(SetupBenchmarkWorld(
@@ -160,7 +160,7 @@ static void BM_drawWHierarchy(benchmark::State &state) {
 
 BENCHMARK(BM_drawWHierarchy)->Unit(benchmark::kMillisecond);
 
-static void BM_drawWOHierarchy(benchmark::State &state) {
+static void BM_drawWOHierarchy(benchmark::State& state) {
   int width = 0;
   int height = 0;
   Render_World world = std::move(SetupBenchmarkWorld(

@@ -24,7 +24,7 @@
 */
 
 struct Entry {
-  Object *obj;
+  Object* obj;
   int part;
   Box box;
 };
@@ -45,8 +45,8 @@ class Hierarchy {
 
   // Return a list of candidates (indices into the entries list) whose
   // bounding boxes intersect the ray.
-  void Intersection_Candidates(const Ray &ray,
-                               std::vector<int> &candidates) const;
+  void Intersection_Candidates(const Ray& ray,
+                               std::vector<int>& candidates) const;
 
   void Update();
 };
