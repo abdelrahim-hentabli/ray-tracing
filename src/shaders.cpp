@@ -4,11 +4,11 @@
 #include "objects/object.hpp"
 #include "render_world.hpp"
 
-static inline vec3 reflect_vector(const vec3 &direction, const vec3 &normal) {
+static inline vec3 reflect_vector(const vec3& direction, const vec3& normal) {
   return direction - 2 * dot(direction, normal) * normal;
 }
 
-static inline vec3 refract_vector(const vec3 &direction, const vec3 &normal,
+static inline vec3 refract_vector(const vec3& direction, const vec3& normal,
                                   double incidence_of_refraction) {
   double cosi = std::max(-1., std::min(1., dot(direction, normal)));
   double etai = 1, etat = incidence_of_refraction;
@@ -24,10 +24,10 @@ static inline vec3 refract_vector(const vec3 &direction, const vec3 &normal,
   return k < 0 ? vec3() : eta * direction + (eta * cosi - sqrtf(k)) * n;
 }
 
-static inline vec3 phong(const Ray &ray, const vec3 &intersection_point,
-                         const vec3 &normal, const Render_World &world,
-                         const vec3 &color_ambient, const vec3 &color_diffuse,
-                         const vec3 &color_specular, double specular_power) {
+static inline vec3 phong(const Ray& ray, const vec3& intersection_point,
+                         const vec3& normal, const Render_World& world,
+                         const vec3& color_ambient, const vec3& color_diffuse,
+                         const vec3& color_specular, double specular_power) {
   vec3 specular = {0, 0, 0};
   vec3 diffuse = {0, 0, 0};
 
@@ -68,9 +68,9 @@ static inline vec3 phong(const Ray &ray, const vec3 &intersection_point,
   return color;
 }
 
-static inline vec3 reflect(const Ray &ray, const vec3 &intersection_point,
-                           const vec3 &normal, int recursion_depth,
-                           const Render_World &world) {
+static inline vec3 reflect(const Ray& ray, const vec3& intersection_point,
+                           const vec3& normal, int recursion_depth,
+                           const Render_World& world) {
   vec3 color = vec3(0, 0, 0);
   if (recursion_depth >= world.recursion_depth_limit) {
     return color;
@@ -91,7 +91,7 @@ static inline vec3 reflect(const Ray &ray, const vec3 &intersection_point,
 }
 
 // calculates kr
-static inline double fresnel(const vec3 &direction, const vec3 &normal,
+static inline double fresnel(const vec3& direction, const vec3& normal,
                              double incidence_of_refraction) {
   float cosi = std::max(-1., std::min(1., dot(direction, normal)));
   float etai = 1, etat = incidence_of_refraction;
@@ -114,11 +114,11 @@ static inline double fresnel(const vec3 &direction, const vec3 &normal,
   }
 }
 
-static inline vec3 refract(const Ray &ray, const vec3 &intersection_point,
-                           const vec3 &normal, int recursion_depth,
-                           const Render_World &world, const vec3 &color_ambient,
-                           const vec3 &color_diffuse,
-                           const vec3 &color_specular, double specular_power,
+static inline vec3 refract(const Ray& ray, const vec3& intersection_point,
+                           const vec3& normal, int recursion_depth,
+                           const Render_World& world, const vec3& color_ambient,
+                           const vec3& color_diffuse,
+                           const vec3& color_specular, double specular_power,
                            double incidence_of_refraction) {
   vec3 color;
   if (recursion_depth >= world.recursion_depth_limit) {
@@ -170,9 +170,9 @@ static inline vec3 refract(const Ray &ray, const vec3 &intersection_point,
   return color;
 }
 
-vec3 Shade_Surface(const Ray &ray, const vec3 &intersection_point,
-                   const vec3 &normal, int recursion_depth,
-                   const Render_World &world, const shader_data &sd) {
+vec3 Shade_Surface(const Ray& ray, const vec3& intersection_point,
+                   const vec3& normal, int recursion_depth,
+                   const Render_World& world, const shader_data& sd) {
   vec3 color;
 
   // Object Color

@@ -7,7 +7,7 @@
 
 typedef unsigned int Pixel;
 
-inline Pixel Pixel_Color(const vec3 &color) {
+inline Pixel Pixel_Color(const vec3& color) {
   unsigned int r = std::min(color[0], 1.0) * 255;
   unsigned int g = std::min(color[1], 1.0) * 255;
   unsigned int b = std::min(color[2], 1.0) * 255;
@@ -37,7 +37,7 @@ class Camera {
 
   // Describes the pixels of the image
   ivec2 number_pixels;  // number of pixels: x and y direction
-  Pixel *colors;        // Pixel data; row-major order
+  Pixel* colors;        // Pixel data; row-major order
 
   // Describes updating the location and rotation of camera
   vec3 velocity;
@@ -47,27 +47,27 @@ class Camera {
 
   Camera();
   ~Camera();
-  Camera(const Camera &other);
-  Camera &operator=(const Camera &other);
+  Camera(const Camera& other);
+  Camera& operator=(const Camera& other);
 
   // Used for setting up camera parameters
-  void Position_And_Aim_Camera(const vec3 &position_input,
-                               const vec3 &look_at_point,
-                               const vec3 &pseudo_up_vector);
+  void Position_And_Aim_Camera(const vec3& position_input,
+                               const vec3& look_at_point,
+                               const vec3& pseudo_up_vector);
   void Focus_Camera(double focal_distance, double aspect_ratio,
                     double field_of_view);
 
   void Set_Film_Position();
-  void Set_Resolution(const ivec2 &number_pixels_input);
+  void Set_Resolution(const ivec2& number_pixels_input);
 
   // Used for determining the where pixels are
-  vec3 World_Position(const ivec2 &pixel_index);
-  vec2 Cell_Center(const ivec2 &index) const {
+  vec3 World_Position(const ivec2& pixel_index);
+  vec2 Cell_Center(const ivec2& index) const {
     return min + (vec2(index) + vec2(.5, .5)) * pixel_size;
   }
 
   // Call to set the color of a pixel
-  void Set_Pixel(const ivec2 &pixel_index, const Pixel &color) {
+  void Set_Pixel(const ivec2& pixel_index, const Pixel& color) {
     int i = pixel_index[0];
     int j = pixel_index[1];
     colors[j * number_pixels[0] + i] = color;

@@ -10,9 +10,9 @@
 #include "objects/sphere.hpp"
 #include "types.hpp"
 
-void Parse(Render_World &world, int &width, int &height,
-           const char *test_file) {
-  FILE *F = fopen(test_file, "r");
+void Parse(Render_World& world, int& width, int& height,
+           const char* test_file) {
+  FILE* F = fopen(test_file, "r");
   if (!F) {
     std::cout << "Failed to open file '" << test_file << "'\n";
     exit(EXIT_FAILURE);
@@ -25,7 +25,7 @@ void Parse(Render_World &world, int &width, int &height,
   std::string name, s0, s1, s2;
 
   std::map<std::string, vec3> colors;
-  std::map<std::string, Object *> objects;
+  std::map<std::string, Object*> objects;
   std::map<std::string, shader_data> shaders;
 
   shader_data default_bg;
@@ -46,7 +46,7 @@ void Parse(Render_World &world, int &width, int &height,
     } else if (item == "plane") {
       ss >> name >> u >> v >> s0;
       assert(ss);
-      Object *o = new Plane(u, v);
+      Object* o = new Plane(u, v);
       std::map<std::string, shader_data>::const_iterator sh = shaders.find(s0);
       assert(sh != shaders.end());
       o->sd = sh->second;
@@ -57,7 +57,7 @@ void Parse(Render_World &world, int &width, int &height,
     } else if (item == "sphere") {
       ss >> name >> u >> f0 >> s0;
       assert(ss);
-      Object *o = new Sphere(u, f0);
+      Object* o = new Sphere(u, f0);
       std::map<std::string, shader_data>::const_iterator sh = shaders.find(s0);
       assert(sh != shaders.end());
       o->sd = sh->second;
@@ -68,7 +68,7 @@ void Parse(Render_World &world, int &width, int &height,
     } else if (item == "mesh") {
       ss >> name >> s0 >> s1;
       assert(ss);
-      Mesh *o = new Mesh;
+      Mesh* o = new Mesh;
       o->Read_Obj(s0.c_str());
       std::map<std::string, shader_data>::const_iterator sh = shaders.find(s1);
       assert(sh != shaders.end());
