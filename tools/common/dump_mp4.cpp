@@ -37,14 +37,14 @@ extern "C" {
 }
 
 #undef av_err2str
-#define av_err2str(errnum)                                                 \
-  av_make_error_string((char *)__builtin_alloca(AV_ERROR_MAX_STRING_SIZE), \
+#define av_err2str(errnum)                                                \
+  av_make_error_string((char*)__builtin_alloca(AV_ERROR_MAX_STRING_SIZE), \
                        AV_ERROR_MAX_STRING_SIZE, errnum)
 
 // a wrapper around a single output AVStream
 typedef struct OutputStream {
-  AVStream *st;
-  AVCodecContext *enc;
+  AVStream* st;
+  AVCodecContext* enc;
 
   /* metadata*/
   int64_t duration;  // 10.0
@@ -63,19 +63,19 @@ typedef struct OutputStream {
   int64_t next_pts;
   int samples_count;
 
-  AVFrame *frame;
-  AVFrame *tmp_frame;
+  AVFrame* frame;
+  AVFrame* tmp_frame;
 
-  AVPacket *tmp_pkt;
+  AVPacket* tmp_pkt;
 
   float t, tincr, tincr2;
 
-  struct SwsContext *sws_ctx;
-  struct SwrContext *swr_ctx;
+  struct SwsContext* sws_ctx;
+  struct SwrContext* swr_ctx;
 } OutputStream;
 
-static int write_frame(AVFormatContext *fmt_ctx, AVCodecContext *c,
-                       AVStream *st, AVFrame *frame, AVPacket *pkt) {
+static int write_frame(AVFormatContext* fmt_ctx, AVCodecContext* c,
+                       AVStream* st, AVFrame* frame, AVPacket* pkt) {
   int ret;
 
   // send the frame to the encoder
@@ -115,9 +115,9 @@ static int write_frame(AVFormatContext *fmt_ctx, AVCodecContext *c,
 }
 
 /* Add an output stream. */
-static void add_stream(OutputStream *ost, AVFormatContext *oc,
-                       const AVCodec **codec, enum AVCodecID codec_id) {
-  AVCodecContext *c;
+static void add_stream(OutputStream* ost, AVFormatContext* oc,
+                       const AVCodec** codec, enum AVCodecID codec_id) {
+  AVCodecContext* c;
   int i;
 
   /* find the encoder */
@@ -222,15 +222,15 @@ static void add_stream(OutputStream *ost, AVFormatContext *oc,
 /* audio output */
 
 #if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 0, 0)
-static AVFrame *alloc_audio_frame(enum AVSampleFormat sample_fmt,
-                                  const AVChannelLayout *channel_layout,
+static AVFrame* alloc_audio_frame(enum AVSampleFormat sample_fmt,
+                                  const AVChannelLayout* channel_layout,
                                   int sample_rate, int nb_samples) {
 #else
-static AVFrame *alloc_audio_frame(enum AVSampleFormat sample_fmt,
+static AVFrame* alloc_audio_frame(enum AVSampleFormat sample_fmt,
                                   uint64_t channel_layout, int sample_rate,
                                   int nb_samples) {
 #endif
-  AVFrame *frame = av_frame_alloc();
+  AVFrame* frame = av_frame_alloc();
   if (!frame) {
     fprintf(stderr, "Error allocating an audio frame\n");
     exit(1);
@@ -256,12 +256,12 @@ static AVFrame *alloc_audio_frame(enum AVSampleFormat sample_fmt,
   return frame;
 }
 
-static void open_audio(AVFormatContext *oc, const AVCodec *codec,
-                       OutputStream *ost, AVDictionary *opt_arg) {
-  AVCodecContext *c;
+static void open_audio(AVFormatContext* oc, const AVCodec* codec,
+                       OutputStream* ost, AVDictionary* opt_arg) {
+  AVCodecContext* c;
   int nb_samples;
   int ret;
-  AVDictionary *opt = NULL;
+  AVDictionary* opt = NULL;
 
   c = ost->enc;
 
@@ -333,10 +333,10 @@ static void open_audio(AVFormatContext *oc, const AVCodec *codec,
 
 /* Prepare a 16 bit dummy audio frame of 'frame_size' samples and
  * 'nb_channels' channels. */
-static AVFrame *get_audio_frame(OutputStream *ost) {
-  AVFrame *frame = ost->tmp_frame;
+static AVFrame* get_audio_frame(OutputStream* ost) {
+  AVFrame* frame = ost->tmp_frame;
   int j, i, v;
-  int16_t *q = (int16_t *)frame->data[0];
+  int16_t* q = (int16_t*)frame->data[0];
 
   /* check if we want to generate more frames */
   if (av_compare_ts(ost->next_pts, ost->enc->time_base, ost->duration,
@@ -364,9 +364,9 @@ static AVFrame *get_audio_frame(OutputStream *ost) {
  * encode one audio frame and send it to the muxer
  * return 1 when encoding is finished, 0 otherwise
  */
-static int write_audio_frame(AVFormatContext *oc, OutputStream *ost) {
-  AVCodecContext *c;
-  AVFrame *frame;
+static int write_audio_frame(AVFormatContext* oc, OutputStream* ost) {
+  AVCodecContext* c;
+  AVFrame* frame;
   int ret;
   int dst_nb_samples;
 
@@ -392,7 +392,7 @@ static int write_audio_frame(AVFormatContext *oc, OutputStream *ost) {
 
     /* convert to destination format */
     ret = swr_convert(ost->swr_ctx, ost->frame->data, dst_nb_samples,
-                      (const uint8_t **)frame->data, frame->nb_samples);
+                      (const uint8_t**)frame->data, frame->nb_samples);
     if (ret < 0) {
       fprintf(stderr, "Error while converting\n");
       exit(1);
@@ -410,8 +410,8 @@ static int write_audio_frame(AVFormatContext *oc, OutputStream *ost) {
 /**************************************************************/
 /* video output */
 
-static AVFrame *alloc_frame(enum AVPixelFormat pix_fmt, int width, int height) {
-  AVFrame *frame;
+static AVFrame* alloc_frame(enum AVPixelFormat pix_fmt, int width, int height) {
+  AVFrame* frame;
   int ret;
 
   frame = av_frame_alloc();
@@ -431,11 +431,11 @@ static AVFrame *alloc_frame(enum AVPixelFormat pix_fmt, int width, int height) {
   return frame;
 }
 
-static void open_video(AVFormatContext *oc, const AVCodec *codec,
-                       OutputStream *ost, AVDictionary *opt_arg) {
+static void open_video(AVFormatContext* oc, const AVCodec* codec,
+                       OutputStream* ost, AVDictionary* opt_arg) {
   int ret;
-  AVCodecContext *c = ost->enc;
-  AVDictionary *opt = NULL;
+  AVCodecContext* c = ost->enc;
+  AVDictionary* opt = NULL;
 
   av_dict_copy(&opt, opt_arg, 0);
 
@@ -475,12 +475,12 @@ static void open_video(AVFormatContext *oc, const AVCodec *codec,
 }
 
 /* Prepare a dummy image. */
-static void fill_yuv_image(AVFrame *pict, int frame_index, int width,
-                           int height, Pixel **data) {
+static void fill_yuv_image(AVFrame* pict, int frame_index, int width,
+                           int height, Pixel** data) {
   int x, y, i;
 
   i = frame_index;
-  Pixel *frame = data[i];
+  Pixel* frame = data[i];
 
   /* Y */
   for (y = 0; y < height; y++) {
@@ -558,8 +558,8 @@ static void fill_yuv_image(AVFrame *pict, int frame_index, int width,
   }
 }
 
-static AVFrame *get_video_frame(OutputStream *ost, Pixel **data) {
-  AVCodecContext *c = ost->enc;
+static AVFrame* get_video_frame(OutputStream* ost, Pixel** data) {
+  AVCodecContext* c = ost->enc;
 
   /* check if we want to generate more frames */
   if (av_compare_ts(ost->next_pts, c->time_base, ost->duration,
@@ -583,7 +583,7 @@ static AVFrame *get_video_frame(OutputStream *ost, Pixel **data) {
       }
     }
     fill_yuv_image(ost->tmp_frame, ost->next_pts, c->width, c->height, data);
-    sws_scale(ost->sws_ctx, (const uint8_t *const *)ost->tmp_frame->data,
+    sws_scale(ost->sws_ctx, (const uint8_t* const*)ost->tmp_frame->data,
               ost->tmp_frame->linesize, 0, c->height, ost->frame->data,
               ost->frame->linesize);
   } else {
@@ -599,13 +599,13 @@ static AVFrame *get_video_frame(OutputStream *ost, Pixel **data) {
  * encode one video frame and send it to the muxer
  * return 1 when encoding is finished, 0 otherwise
  */
-static int write_video_frame(AVFormatContext *oc, OutputStream *ost,
-                             Pixel **data) {
+static int write_video_frame(AVFormatContext* oc, OutputStream* ost,
+                             Pixel** data) {
   return write_frame(oc, ost->enc, ost->st, get_video_frame(ost, data),
                      ost->tmp_pkt);
 }
 
-static void close_stream(AVFormatContext *oc, OutputStream *ost) {
+static void close_stream(AVFormatContext* oc, OutputStream* ost) {
   avcodec_free_context(&ost->enc);
   av_frame_free(&ost->frame);
   av_frame_free(&ost->tmp_frame);
@@ -614,16 +614,16 @@ static void close_stream(AVFormatContext *oc, OutputStream *ost) {
   swr_free(&ost->swr_ctx);
 }
 
-int Dump_mp4(const char *filename, Pixel **data, int width, int height,
+int Dump_mp4(const char* filename, Pixel** data, int width, int height,
              int frames, int framerate, int framerateDenominator) {
   OutputStream video_st = {0}, audio_st = {0};
-  const AVOutputFormat *fmt;
-  AVFormatContext *oc;
+  const AVOutputFormat* fmt;
+  AVFormatContext* oc;
   const AVCodec *audio_codec, *video_codec;
   int ret;
   int have_video = 0, have_audio = 0;
   int encode_video = 0, encode_audio = 0;
-  AVDictionary *opt = NULL;
+  AVDictionary* opt = NULL;
   int i;
 
   /* Set up metadata */

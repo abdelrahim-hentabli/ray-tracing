@@ -10,7 +10,7 @@ class Ray {
 
   Ray() : endpoint(0, 0, 0), direction(0, 0, 1) {}
 
-  Ray(const vec3 &endpoint_input, const vec3 &direction_input)
+  Ray(const vec3& endpoint_input, const vec3& direction_input)
       : endpoint(endpoint_input), direction(direction_input.normalized()) {}
 
   vec3 Point(double t) const { return endpoint + direction * t; }

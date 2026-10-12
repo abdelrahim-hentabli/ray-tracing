@@ -56,7 +56,7 @@ bool debug_pixel = false;
 // this, as it will make debugging your hierarchy much easier.
 bool disable_hierarchy = false;
 
-void Usage(const char *exec) {
+void Usage(const char* exec) {
   std::cerr << "Usage: " << exec
             << " -i <test-file> [ -s <solution-file> ] [ -o <stats-file> ] [ "
                "-x <debug-x-coord> -y <debug-y-coord> ]"
@@ -64,10 +64,10 @@ void Usage(const char *exec) {
   exit(1);
 }
 
-int main(int argc, char **argv) {
-  const char *solution_file = 0;
-  const char *input_file = 0;
-  const char *statistics_file = 0;
+int main(int argc, char** argv) {
+  const char* solution_file = 0;
+  const char* input_file = 0;
+  const char* statistics_file = 0;
   int test_x = -1, test_y = -1;
 
   // Parse commandline options
@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
   // If a solution is specified, compare against it.
   if (solution_file) {
     int width2 = 0, height2 = 0;
-    Pixel *data_sol = 0;
+    Pixel* data_sol = 0;
 
     // Read solution from disk
     Read_png(data_sol, width2, height2, solution_file);
@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
 
     // Output information on how well it matches. Optionally save to file
     // to avoid getting confused by debugging print statements.
-    FILE *stats_file = stdout;
+    FILE* stats_file = stdout;
     if (statistics_file) stats_file = fopen(statistics_file, "w");
     fprintf(stats_file, "diff: %.2f\n", error / total * 100);
     if (statistics_file) fclose(stats_file);

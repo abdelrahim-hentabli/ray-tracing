@@ -65,8 +65,8 @@ void Hierarchy::Build_Tree() {
 
 // Return a list of candidates (indices into the entries list) whose
 // bounding boxes intersect the ray.
-void Hierarchy::Intersection_Candidates(const Ray &ray,
-                                        std::vector<int> &candidates) const {
+void Hierarchy::Intersection_Candidates(const Ray& ray,
+                                        std::vector<int>& candidates) const {
   int n = entries.size();
   if (!n) return;
   std::queue<int> check_nodes;
