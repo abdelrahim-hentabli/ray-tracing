@@ -12,7 +12,7 @@ static const double weight_tolerance = 1e-4;
 
 // Read in a mesh from an obj file.  Populates the bounding box and registers
 // one part per triangle (by setting number_parts).
-void Mesh::Read_Obj(const char *file) {
+void Mesh::Read_Obj(const char* file) {
   std::ifstream fin(getObjectsDir() + file);
   if (!fin) {
     exit(EXIT_FAILURE);
@@ -38,7 +38,7 @@ void Mesh::Read_Obj(const char *file) {
 }
 
 // Check for an intersection against the ray.  See the base class for details.
-Hit Mesh::Intersection(const Ray &ray, int part) const {
+Hit Mesh::Intersection(const Ray& ray, int part) const {
   double dist;
   if (part >= 0) {
     if (part >= number_parts) {
@@ -74,7 +74,7 @@ Hit Mesh::Intersection(const Ray &ray, int part) const {
 }
 
 // Compute the normal direction for the triangle with index part.
-vec3 Mesh::Normal(const vec3 &point, int part) const {
+vec3 Mesh::Normal(const vec3& point, int part) const {
   assert(part >= 0);
   vec3 point0 = vertices[triangles[part][0]];
   vec3 point1 = vertices[triangles[part][1]];
@@ -96,7 +96,7 @@ vec3 Mesh::Normal(const vec3 &point, int part) const {
 // larger than -weight_tolerance.  The use of small_t avoid the self-shadowing
 // bug, and the use of weight_tolerance prevents rays from passing in between
 // two triangles.
-bool Mesh::Intersect_Triangle(const Ray &ray, int tri, double &dist) const {
+bool Mesh::Intersect_Triangle(const Ray& ray, int tri, double& dist) const {
   ivec3 triangle = triangles[tri];
   vec3 point0 = vertices[triangle[0]];
   vec3 point1 = vertices[triangle[1]];

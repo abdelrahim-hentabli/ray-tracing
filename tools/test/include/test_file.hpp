@@ -18,7 +18,7 @@ void test_file(std::string case_name) {
   world.Render();
 
   int width2 = 0, height2 = 0;
-  Pixel *data_sol = 0;
+  Pixel* data_sol = 0;
 
   // Read solution from disk
   Read_png(data_sol, width2, height2,
@@ -89,7 +89,7 @@ Render_World SetupBenchmarkWorld(int width, int height, vec3 cameraP,
   world.sd = default_bg;
 
   // Setup objects
-  Mesh *o = new Mesh;
+  Mesh* o = new Mesh;
   o->Read_Obj("sphere.obj");
   shader_data temp;
   temp.type = phong_shader;
@@ -130,7 +130,7 @@ void test_benchmark() {
 
   // Compare agains stored image for test
   int width2 = 0, height2 = 0;
-  Pixel *data_sol = 0;
+  Pixel* data_sol = 0;
 
   // Read solution from disk
   Read_png(data_sol, width2, height2,

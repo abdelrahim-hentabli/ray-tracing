@@ -15,7 +15,7 @@ extern bool debug_pixel;
 class Ray;
 
 struct Hit {
-  const Object *object;  // object that was intersected
+  const Object* object;  // object that was intersected
   double dist;           // distance along ray to intersection location
   int part;              // which part was intersected (eg, for meshes)
 };
@@ -41,13 +41,13 @@ class Object {
   // For meshes, the part structure attribute should be set to the
   // index of the triangle that was intersected.  For other types of
   // objects, the part attribute can be ignored.
-  virtual Hit Intersection(const Ray &ray, int part) const = 0;
+  virtual Hit Intersection(const Ray& ray, int part) const = 0;
 
   // Return the normal.  For objects with multiple parts (meshes), you
   // will need to use part to determine which piece was intersected.
   // It will be set to the part structure entry returned from the
   // intersection routine.
-  virtual vec3 Normal(const vec3 &point, int part) const = 0;
+  virtual vec3 Normal(const vec3& point, int part) const = 0;
 
   // If part>=0, return the bounding box for the specified part.
   // If part<0, return the bounding box for the whole object.

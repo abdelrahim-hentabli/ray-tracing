@@ -10,11 +10,11 @@ class Plane : public Object {
   vec3 velocity;
   vec3 acceleration;
 
-  Plane(const vec3 &point, const vec3 &normal)
+  Plane(const vec3& point, const vec3& normal)
       : x1(point), normal(normal.normalized()) {}
 
-  virtual Hit Intersection(const Ray &ray, int part) const override;
-  virtual vec3 Normal(const vec3 &point, int part) const override;
+  virtual Hit Intersection(const Ray& ray, int part) const override;
+  virtual vec3 Normal(const vec3& point, int part) const override;
   virtual Box Bounding_Box(int part) const override;
   void Update(double deltaT) override;
 };
