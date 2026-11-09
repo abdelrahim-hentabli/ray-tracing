@@ -8,7 +8,7 @@ Camera::~Camera() {
   }
 }
 
-Camera::Camera(const Camera &other) {
+Camera::Camera(const Camera& other) {
   position = other.position;
   film_position = other.film_position;
   look_vector = other.look_vector;
@@ -25,7 +25,7 @@ Camera::Camera(const Camera &other) {
   colors = new Pixel[number_pixels[0] * number_pixels[1]];
 }
 
-Camera &Camera::operator=(const Camera &other) {
+Camera& Camera::operator=(const Camera& other) {
   position = other.position;
   film_position = other.film_position;
   look_vector = other.look_vector;
@@ -47,9 +47,9 @@ Camera &Camera::operator=(const Camera &other) {
   return *this;
 }
 
-void Camera::Position_And_Aim_Camera(const vec3 &position_input,
-                                     const vec3 &look_at_point,
-                                     const vec3 &pseudo_up_vector) {
+void Camera::Position_And_Aim_Camera(const vec3& position_input,
+                                     const vec3& look_at_point,
+                                     const vec3& pseudo_up_vector) {
   position = position_input;
   look_vector = (look_at_point - position).normalized();
   horizontal_vector = cross(look_vector, pseudo_up_vector).normalized();
@@ -69,7 +69,7 @@ void Camera::Set_Film_Position() {
   film_position = position + look_vector * focal_distance_;
 }
 
-void Camera::Set_Resolution(const ivec2 &number_pixels_input) {
+void Camera::Set_Resolution(const ivec2& number_pixels_input) {
   number_pixels = number_pixels_input;
   if (colors) delete[] colors;
   colors = new Pixel[number_pixels[0] * number_pixels[1]];
@@ -79,7 +79,7 @@ void Camera::Set_Resolution(const ivec2 &number_pixels_input) {
 }
 
 // Find the world position of the input pixel
-vec3 Camera::World_Position(const ivec2 &pixel_index) {
+vec3 Camera::World_Position(const ivec2& pixel_index) {
   vec2 cellCenterScreenSpace = Cell_Center(pixel_index);
   vec3 result =
       film_position + ((cellCenterScreenSpace[0] * horizontal_vector) +

@@ -3,7 +3,7 @@
 #include "ray.hpp"
 
 // Determine if the ray intersects with the sphere
-Hit Sphere::Intersection(const Ray &ray, int part) const {
+Hit Sphere::Intersection(const Ray& ray, int part) const {
   vec3 L = center - ray.endpoint;
   double tc = dot(L, ray.direction);
   if (tc < 0.0) {
@@ -19,7 +19,7 @@ Hit Sphere::Intersection(const Ray &ray, int part) const {
   return {this, tc - t1c, 0};
 }
 
-vec3 Sphere::Normal(const vec3 &point, int part) const {
+vec3 Sphere::Normal(const vec3& point, int part) const {
   vec3 normal = point - center;
   return normal.normalized();
 }
